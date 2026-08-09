@@ -30,6 +30,18 @@
     });
   }
 
+  // Dropdown menus (mobile tap to expand; desktop uses hover via CSS)
+  document.querySelectorAll('.has-menu > .menu-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      if (window.innerWidth > 940) return; // desktop = hover
+      e.preventDefault();
+      var parent = btn.parentElement;
+      var wasOpen = parent.classList.contains('open');
+      document.querySelectorAll('.has-menu.open').forEach(function (m) { m.classList.remove('open'); });
+      if (!wasOpen) parent.classList.add('open');
+    });
+  });
+
   // Hero load-in
   window.addEventListener('DOMContentLoaded', function () {
     var chev = document.getElementById('heroChevrons');
