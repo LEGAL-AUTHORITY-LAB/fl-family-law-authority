@@ -34,6 +34,21 @@ SVC_COLOR = {"lawyers": "var(--pink)", "mediators": "var(--teal)",
 PAGES = []  # (relpath, html)
 
 
+# ---- Photo slots: use a dedicated file if present, else fall back -----------
+# Upload the real shots into assets/images/ with these names and rebuild — every
+# portrait below picks them up automatically. See PHOTOS.md.
+def photo(*names, default):
+    for n in names:
+        if os.path.exists(os.path.join(ROOT_DIR, "assets", "images", n)):
+            return n
+    return default
+
+HERO_DUO  = photo("hero-duo.jpg", "team-duo.jpg", default="team-laptop.jpg")
+LEISA_IMG = photo("leisa.jpg", default="portrait-seated-1.jpg")
+NAZ_IMG   = photo("nazarena.jpg", default="team-laptop.jpg")
+TEAM_TRIO = photo("team-trio.jpg", "team-three.jpg", default="")
+
+
 def add(relpath, html_str):
     PAGES.append((relpath, html_str))
 
@@ -1022,12 +1037,12 @@ body = f"""
 {page_hero("Our team", "The person handling your case — not a rotating cast",
   "You'll work directly with the person handling your matter. Here's who you'll actually talk to, from the attorneys to the staff who keep your case moving.",
   root, [("Team","team/")], tint="tint-topic")}
-
+{('<section class="section paper" style="padding-bottom:0"><div class="wrap"><img src="'+root+'assets/images/'+TEAM_TRIO+'" alt="The Family Matters Law Group team" style="width:100%;border-radius:var(--radius)"></div></section>') if TEAM_TRIO else ''}
 <section class="section paper"><div class="wrap">
   <div class="kicker">Attorneys</div>
   <div class="team-grid">
     <article class="attorney" data-who="leisa">
-      <div class="attorney-photo" role="img" aria-label="Attorney Leisa Wintz"></div>
+      <div class="attorney-photo" role="img" aria-label="Attorney Leisa Wintz" style="background-image:url('{root}assets/images/{LEISA_IMG}')"></div>
       <div class="attorney-body">
         <h3>Leisa Wintz</h3><div class="role">Founding Attorney</div>
         <p>Founded the firm in 2010 after a start in a domestic violence shelter, an internship in the 11th Circuit's DV Division, and a Master's in Marriage &amp; Family Therapy. She reads a case as both a lawyer and a family-systems clinician.</p>
@@ -1036,7 +1051,7 @@ body = f"""
       </div>
     </article>
     <article class="attorney" data-who="both">
-      <div class="attorney-photo" role="img" aria-label="Attorney Nazarena Hauser"></div>
+      <div class="attorney-photo" role="img" aria-label="Attorney Nazarena Hauser" style="background-image:url('{root}assets/images/{NAZ_IMG}')"></div>
       <div class="attorney-body">
         <h3>Nazarena Hauser</h3><div class="role">Head of Litigation</div>
         <p>Leads the firm's litigation since 2017 and practices fully bilingually — including mediation conducted entirely in Spanish. Past President of the Broward County Hispanic Bar Association and a Broward Bar "40 Under 40."</p>
@@ -1083,6 +1098,7 @@ body = f"""
     <p>Read Leisa on <a href="{root}blog/family-systems-in-mediation/">why a family-systems background changes the way she mediates</a>.</p>
   </div>
   <aside class="aside-card">
+    <img src="{root}assets/images/{LEISA_IMG}" alt="Leisa Wintz" style="width:100%;border-radius:var(--radius);margin-bottom:18px;">
     <h4>Work with Leisa</h4>
     <ul>
       <li><a href="{root}ways-we-help/mediators/">Mediation</a></li>
@@ -1114,6 +1130,7 @@ body = f"""
     <p>Nazarena also writes at the firm's Spanish-language site, <a href="{SPANISH}">abogada-familiar.com</a>.</p>
   </div>
   <aside class="aside-card">
+    <img src="{root}assets/images/{NAZ_IMG}" alt="Nazarena Hauser" style="width:100%;border-radius:var(--radius);margin-bottom:18px;">
     <h4>Work with Nazarena</h4>
     <ul>
       <li><a href="{root}ways-we-help/lawyers/">Litigation</a></li>
@@ -1443,7 +1460,7 @@ home_body = f"""
       </div>
     </div>
   </div></div>
-  <div class="hero-photo" role="img" aria-label="Attorneys Leisa Wintz and Nazarena Hauser of Family Matters Law Group"></div>
+  <div class="hero-photo" role="img" aria-label="Attorneys Leisa Wintz and Nazarena Hauser of Family Matters Law Group" style="background-image:url('{root}assets/images/{HERO_DUO}')"></div>
 </section>
 
 <section class="trust" aria-label="Why families choose us"><div class="wrap">
@@ -1497,12 +1514,12 @@ home_body = f"""
   <div class="section-head reveal"><div><span class="eyebrow" style="color:var(--teal)">The team</span><h2 class="display">Attorneys who've sat<br>where you're sitting.</h2></div>
     <p>You'll work directly with the person handling your case — not a rotating cast of associates.</p></div>
   <div class="team-grid reveal">
-    <article class="attorney" data-who="leisa"><div class="attorney-photo" role="img" aria-label="Attorney Leisa Wintz"></div>
+    <article class="attorney" data-who="leisa"><div class="attorney-photo" role="img" aria-label="Attorney Leisa Wintz" style="background-image:url('{root}assets/images/{LEISA_IMG}')"></div>
       <div class="attorney-body"><h3>Leisa Wintz</h3><div class="role">Founding Attorney</div>
         <p>Founded the firm in 2010 after a start in a domestic violence shelter, an internship in the 11th Circuit's DV Division, and a Master's in Marriage &amp; Family Therapy. She reads a case as both a lawyer and a family-systems clinician.</p>
         <div class="creds"><span>Supreme Court Certified Mediator</span><span>Guardian ad Litem</span><span>Parenting Coordinator</span><span>Collaborative Divorce Advocate</span></div>
         <a class="link" href="{root}attorneys/leisa-wintz/">Read Leisa's story <span class="arrow">→</span></a></div></article>
-    <article class="attorney" data-who="both"><div class="attorney-photo" role="img" aria-label="Attorney Nazarena Hauser"></div>
+    <article class="attorney" data-who="both"><div class="attorney-photo" role="img" aria-label="Attorney Nazarena Hauser" style="background-image:url('{root}assets/images/{NAZ_IMG}')"></div>
       <div class="attorney-body"><h3>Nazarena Hauser</h3><div class="role">Head of Litigation</div>
         <p>Leads the firm's litigation since 2017 and practices fully bilingually — including mediation conducted entirely in Spanish. Past President of the Broward County Hispanic Bar Association and a Broward Bar "40 Under 40."</p>
         <div class="creds"><span>Head of Litigation</span><span>Certified Mediator</span><span>Bilingual — Español</span><span>40 Under 40</span></div>
