@@ -1,0 +1,61 @@
+name: Deploy site to GitHub Pages
+
+# Deploys the generated static site (repo root) to GitHub Pages.
+# One-time setup: repo Settings → Pages → Build and deployment →
+# Source: "GitHub Actions". After that this runs on every push to the branch.
+
+on:
+  push:
+    branches: [claude/fmlg-website-rebuild-2xuyol]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assemble published site (exclude sources & build tooling)
+        run: |
+          mkdir -p _site
+          rsync -a \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude '_site' \
+            --exclude 'content' \
+            --exclude 'build.py' \
+            --exclude 'README.md' \
+            --exclude 'preview-homepage.html' \
+            --exclude '*.py' \
+            ./ _site/
+          # Keep Jekyll off so folder-based clean URLs are served as-is.
+          touch _site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
