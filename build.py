@@ -543,7 +543,7 @@ body = f"""
   root, [("Ways we help","ways-we-help/diy-legal-coaches/"),("Paralegal Services","")], tint="tint-coaches",
   ctas=[f'<a href="{CTA["coaches"]}" class="btn btn-solid">Get started</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See document pricing</a>'])}
-
+{feature(root, photo("page-paralegal.jpg", default=""))}
 <section class="section paper">
   <div class="wrap measure prose">
     <div class="kicker">Who this is for</div>
@@ -568,7 +568,7 @@ body = f"""
   root, [("Ways we help","ways-we-help/diy-legal-coaches/"),("DIY Divorce Packages","")], tint="tint-coaches",
   ctas=[f'<a href="{CTA["coaches"]}" class="btn btn-solid">Start your divorce</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">Compare all pricing</a>'])}
-
+{feature(root, photo("page-diy-divorce.jpg", default=""))}
 <section class="section paper">
   <div class="wrap">
     <div class="kicker">Choose your tier</div>
@@ -602,7 +602,7 @@ body = f"""
   "Parenting coordination is a structured, out-of-court process to help high-conflict coparents resolve the ongoing disputes a parenting plan can't fully cover — with a transparent sliding-scale rate stated plainly.",
   root, [("Ways we help","ways-we-help/diy-legal-coaches/"),("Parenting Coordination","")], tint="tint-mediators",
   ctas=[f'<a href="{CTA["get_started"]}" class="btn btn-solid">Get started</a>'])}
-
+{feature(root, photo("page-parenting-coord.jpg", default=""))}
 <section class="section paper">
   <div class="wrap measure">
     <div class="kicker">The process</div>
@@ -633,7 +633,7 @@ body = f"""
   "Collaborative divorce is a structured, out-of-court process where both spouses and their professionals commit to reaching a settlement without litigation. It can be thoughtful, strategic, and peaceful — without sacrificing fairness.",
   root, [("Ways we help","ways-we-help/collaborative-divorce/"),("Collaborative Divorce","")], tint="tint-mediators",
   ctas=[f'<a href="{CTA["get_started"]}" class="btn btn-solid">See if it fits</a>'])}
-
+{feature(root, photo("page-collaborative.jpg", default=""))}
 <section class="section paper">
   <div class="wrap measure prose">
     <div class="kicker">Honest first question</div>
@@ -657,7 +657,15 @@ print("diy subpages queued")
 # =============================================================================
 root = "../../"
 
+TOPIC_FEAT = {
+  "divorce": "topic-divorce.jpg", "custody-and-parenting": "topic-custody.jpg",
+  "child-support": "topic-child-support.jpg", "alimony": "topic-alimony.jpg",
+  "paternity": "topic-paternity.jpg", "adoption": "topic-adoption.jpg",
+  "injunctions-domestic-violence": "topic-injunctions.jpg", "lgbtq-family-law": "topic-lgbtq.jpg",
+  "name-change": "topic-name-change.jpg", "prenup-postnup": "topic-prenup.jpg",
+}
 def build_topic(slug, mtitle, mdesc, eyebrow, h1, lede, main_html, faqs, related, tint="tint-topic"):
+    feat = TOPIC_FEAT.get(slug, "")
     rel = "".join(f'<a href="{root}{href}">{label}</a>' for label, href in related)
     faq_html = ""
     if faqs:
@@ -668,6 +676,7 @@ def build_topic(slug, mtitle, mdesc, eyebrow, h1, lede, main_html, faqs, related
 {page_hero(eyebrow, h1, lede, root, [("Topics","topics/"+slug+"/"),(h1.split("—")[0].strip(),"")], tint=tint,
   ctas=[f'<a href="{CTA["get_started"]}" class="btn btn-solid">Get started</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See pricing</a>'])}
+{feature(root, photo(feat, default=""))}
 {main_html}
 {faq_html}
 <section class="section paper"><div class="wrap">
@@ -1181,6 +1190,7 @@ body = f"""
   "Real, specific, unpolished testimonials — including one from a referring attorney. We keep them honest, the way our brand promises.",
   root, [("Reviews","reviews/")], tint="tint-topic",
   ctas=[f'<a href="{CTA["reviews_ext"]}" class="btn btn-solid" style="background:var(--orange);box-shadow:none;">See all reviews</a>'])}
+{feature(root, photo("page-reviews.jpg", default=""))}
 <section class="section paper"><div class="wrap">
   <div class="rating-hero">
     <div class="rating-num">4.5</div>
@@ -1223,6 +1233,7 @@ body = f"""
 {page_hero("Get started", "Not sure where to begin? Start here.",
   "Four ways in, one honest starting point. Tell us what's going on and we'll route you to the service that actually fits — each links straight to its own intake, no generic contact form.",
   root, [("Get started","get-started/")], tint="tint-lawyers")}
+{feature(root, photo("page-get-started.jpg", default=""))}
 <section class="section paper"><div class="wrap">
   <div class="cards">
     <a class="card" href="{CTA['lawyers']}"><span class="sw" style="background:var(--pink)"></span><h3>I want a lawyer to handle it</h3><p>Full or flat-fee representation for divorce, custody, support, and more.</p><p class="go">Start intake →</p></a>
@@ -1242,6 +1253,7 @@ body = f"""
 {page_hero("Learn", "Straight, current Florida family-law education",
   "Plain-language guides and a real legal glossary — the kind of &lsquo;here&rsquo;s what this actually means&rsquo; content that helps you act instead of panic.",
   root, [("Learn","learn/")], tint="tint-topic")}
+{feature(root, photo("page-learn.jpg", default=""))}
 <section class="section paper"><div class="wrap">
   <div class="cards">
     <a class="card" href="{root}blog/"><span class="sw" style="background:var(--pink)"></span><h3>Blog &amp; Guides</h3><p>In-depth, current guides on alimony, child support, custody, and more.</p><p class="go">Read the blog →</p></a>
