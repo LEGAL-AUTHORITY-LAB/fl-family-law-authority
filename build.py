@@ -48,6 +48,22 @@ LEISA_IMG = photo("leisa.jpg", default="portrait-seated-1.jpg")
 NAZ_IMG   = photo("nazarena.jpg", default="team-laptop.jpg")
 TEAM_TRIO = photo("team-trio.jpg", "team-three.jpg", default="")
 
+# Feature photos for service / about / coparenting pages (fall back to nothing).
+FEAT_LAWYERS   = photo("svc-lawyers.jpg", default="")
+FEAT_MEDIATORS = photo("svc-mediators.jpg", default="")
+FEAT_COACHES   = photo("svc-coaches.jpg", default="")
+FEAT_GAL       = photo("svc-gal.jpg", default="")
+FEAT_ABOUT     = photo("about-duo.jpg", default="")
+FEAT_COPARENT  = photo("coparenting.jpg", default="")
+
+def feature(root, fn, pos="center 22%"):
+    if not fn:
+        return ""
+    return (f'<section class="section paper" style="padding-top:0;padding-bottom:0">'
+            f'<div class="wrap"><img src="{root}assets/images/{fn}" alt="Family Matters Law Group" '
+            f'style="width:100%;max-height:540px;object-fit:cover;object-position:{pos};'
+            f'border-radius:var(--radius);display:block"></div></section>')
+
 
 def add(relpath, html_str):
     PAGES.append((relpath, html_str))
@@ -269,7 +285,7 @@ add_body = f"""
   root, [("Ways we help", "ways-we-help/lawyers/"), ("Lawyers", "")], tint="tint-lawyers",
   ctas=[f'<a href="{CTA["lawyers"]}" class="btn btn-solid">Start your intake</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See flat-fee pricing</a>'])}
-
+{feature(root, FEAT_LAWYERS)}
 <section class="section paper">
   <div class="wrap split">
     <div class="prose">
@@ -334,7 +350,7 @@ body = f"""
   root, [("Ways we help","ways-we-help/mediators/"),("Mediators","")], tint="tint-mediators",
   ctas=[f'<a href="{CTA["mediators"]}" class="btn btn-solid">Book mediation</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See mediation rates</a>'])}
-
+{feature(root, FEAT_MEDIATORS)}
 <section class="section paper">
   <div class="wrap measure prose">
     <div class="kicker">Two ways to use a mediator</div>
@@ -375,7 +391,7 @@ body = f"""
   root, [("Ways we help","ways-we-help/diy-legal-coaches/"),("DIY Legal Coaches","")], tint="tint-coaches",
   ctas=[f'<a href="{CTA["coaches"]}" class="btn btn-solid">Start coaching</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See coaching prices</a>'])}
-
+{feature(root, FEAT_COACHES)}
 <section class="section paper">
   <div class="wrap measure prose">
     <div class="kicker">How it works</div>
@@ -416,7 +432,7 @@ body = f"""
   root, [("Ways we help","ways-we-help/guardians-ad-litem/"),("Guardians ad Litem","")], tint="tint-gal",
   ctas=[f'<a href="{CTA["gal"]}" class="btn btn-solid">Request a GAL</a>',
         f'<a href="{root}blog/guardian-ad-litem-guide/" class="btn btn-outline-light">Read the full guide</a>'])}
-
+{feature(root, FEAT_GAL)}
 <section class="section paper">
   <div class="wrap split">
     <div class="prose">
@@ -471,7 +487,7 @@ body = f"""
   "Whether you're mid-divorce, already final, or never set foot in a courtroom at all — if coparenting is hard, we can help. This service is built around your family, not a script. It isn't therapy, and it isn't legal advice: it's practical coaching for real conflict, real transitions, and real communication problems.",
   root, [("Ways we help","ways-we-help/diy-legal-coaches/"),("Coparenting Coaching","")], tint="tint-mediators",
   ctas=[f'<a href="{CTA["coaches"]}" class="btn btn-solid">Schedule a consult</a>'])}
-
+{feature(root, FEAT_COPARENT)}
 <section class="section paper">
   <div class="wrap measure prose">
     <div class="kicker">What it is</div>
@@ -1006,7 +1022,7 @@ body = f"""
   "We built Family Matters Law Group around the four kinds of help families actually asked for — lawyers, mediators, DIY legal coaches, and guardians ad litem — not the one kind law school teaches. Warm but direct: the honest answer first, then the nuance.",
   root, [("About","about/")], tint="tint-topic",
   ctas=[f'<a href="{root}team/" class="btn btn-solid" style="background:var(--teal);box-shadow:none;">Meet the team</a>'])}
-
+{feature(root, FEAT_ABOUT)}
 <section class="section paper"><div class="wrap">
   <div class="kicker">What makes us different</div>
   <h2 class="h2" style="margin-bottom:22px;">Four commitments, whichever door you walk through</h2>
