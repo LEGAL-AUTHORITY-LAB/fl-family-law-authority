@@ -33,6 +33,7 @@ jobs:
             --exclude '.github' \
             --exclude '_site' \
             --exclude 'content' \
+            --exclude 'docs' \
             --exclude 'build.py' \
             --exclude 'README.md' \
             --exclude 'preview-homepage.html' \
