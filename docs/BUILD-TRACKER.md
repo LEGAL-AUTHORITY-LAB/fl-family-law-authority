@@ -32,7 +32,7 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 | Client doc delivery + review/comments | Staff "Deliver for review" (attorney sign-off) → client "For your review" section; `document_comments` thread both sides w/ real names; status badge Delivered→Viewed→Commented→Approved; audit columns on `documents` |
 | Scannable MD/discovery tracker | `DiscoveryTracker` grouped by 12.285 category; status chip (Complete/Partial/Outstanding/N/A) + produced/expected counts + latest date; collapsed by default; unmatched pooled in "Needs review"; summary strip. Tolson verified |
 | Send for e-signature | Settings E-signature (PandaDoc + Adobe Catch-Hook URLs); doc "Send for signature" w/ prefilled signer + attorney sign-off; server-side POST to hook; `signature_requests` + badge (Sent→Viewed→Signed) + manual status; return webhook (auto-status + signed-PDF write-back) still to wire. Tolson verified |
-| Transcript → Memo | Documents "Case memos" card; input paste/upload (txt/rtf/docx/pdf/image, server-side extract + OCR); Lovable AI → 9-section FMLG memo + Archie Smokeball list; branded on-screen review (Edit/Preview) + attorney sign-off gate → `pdf-lib` branded PDF → POST to `sharepoint_notes_webhook_url` (download-only fallback); `case_memos` table. Tolson verified |
+| Transcript → Memo | Documents "Case memos" card; input paste/upload/doc-link (server-side local extract); **Claude Cowork handoff** → paste memo markdown back → 9-section branded review (Edit/Preview) + attorney sign-off → `pdf-lib` branded PDF → POST to `sharepoint_notes_webhook_url` (download fallback); `case_memos` table. Tolson verified |
 
 | Transcript doc-link + Claude Cowork button | (a) "paste doc link" (SharePoint URL) transcript source; (b) per-matter/per-staff Claude button (`matter_claude_projects`): Set up → matter instruction block w/ SharePoint link → paste Cowork URL → Open in Claude. Tolson verified |
 
@@ -41,22 +41,21 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 | OCR off Gemini (hybrid) | `document-text.server.ts`: native text → unpdf PDF text layer → tesseract WASM → "needs Claude" signal; no vision model, no `LOVABLE_API_KEY`. Verified network-disabled |
 | AI migration COMPLETE | `claude-handoff.ts`; memo/case-info/deadline all Cowork-handoff; deleted case-info/intake/retainer/deadline `.server` + `ai-gateway.server` + legacy `.functions`; removed FloatingChat + `/api/chat`. **Zero non-Claude model calls over client data**; `LOVABLE_API_KEY` only for SharePoint/Slack connectors |
 
-## 🔨 In progress — Leads module (#33)
-- **Stage 1 DONE** — `leads` table + staff RLS; public intake `POST /api/public/leads` (token-protected, flexible field mapping, `raw_payload`); Slack + Outlook new-lead alerts (config in Settings→Leads); Leads sidebar → inbox (status filters) → `/leads/$leadId` detail (status/assignee/notes, audit-logged). Endpoint URL + token delivered in chat (token NOT committed). Outlook connector must be linked + Settings emails/channel set for alerts.
-- **Stage 2 DONE** — triage toggles (conflict-check/contacted, attributed) + decision Free/Paid consult / Reject(reason); inbox Active default + consult badges; on consult scheduled → SharePoint lead file via `leads_sharepoint_webhook_url` (idempotent, non-blocking).
-- **Stage 3 DONE** — consult memo for leads: shared `branded-memo.tsx`, `case_memos.lead_id`, `lead-instructions.ts` handoff, paste-back → branded PDF → lead SharePoint save.
-- **Stage 4 DONE** — `fmlg-retainer` skill; generate/attach retainer; lead-scoped e-sign (`signature_requests.lead_id`); payment link + toggles; `signed_paid` roll-up + "Ready to convert" banner.
-- **Stage 5 (next)** — Convert to Client (create client+matter, carry lead form/memo/contact, mark converted).
+| Leads module (full) | 5 stages: public Zapier intake endpoint (token) + in-app/Slack/Outlook alerts; triage toggles + Free/Paid/Reject decision + SharePoint lead file; consult memo (Claude handoff → branded PDF → SharePoint); retainer (`fmlg-retainer` skill) + lead-scoped e-sign + payment + `signed_paid` roll-up; **Convert to Client** (atomic RPC, client dedup, memo/retainer carry-over, matter-folder Zapier, double-convert guard). No AI in-app |
 
 ## ⏳ Backlog (prioritized)
-1. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
-5. **Four staff buttons / Advanced Discovery page** — dedicated OP-side surface: paste OP discovery SharePoint link → OP discovery-gap (`fmlg-discovery-gap`), income assessment (`fmlg-income-assessor` + `fmlg-fa-crosscheck`), CS/alimony/ED (`fmlg-cs-worksheet`/`fmlg-alimony-assessor`/`fmlg-ed-chart`), advanced-discovery drafting (`fmlg-advanced-discovery` + templates). Also Disco Tracker / Cert of Compliance buttons. All drafts → attorney review.
-6. **Staff Draft button** — pick doc type (freeform or dropdown by case type) → AI draft from templates/skills → attorney review.
-7. **Transcript → Memo button** — drop transcript → `fmlg-case-memo` → memo saved to matter NOTES folder. Dep: Zapier SharePoint write.
-8. **Close File** — case-closing skill (⛔ file re-upload pending) + Finalize Closing = move matter folder OPEN → CLOSED FILES. Dep: Zapier SharePoint write (move).
-9. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
-10. **Templates merge repoint** — Templates page merge dropdown still queries legacy `cases`; repoint to `matters`.
-11. **Client-side OneDrive push** — only if wanted beyond simple download.
+1. **"Sync to SharePoint" on tracker pages (#29)** — Stage 1: ingest an existing tracker doc already in the matter folder; Stage 2: prompt for optional full folder scan; merge + show what changed.
+2. **Close File (#14)** — now Cowork-native: `fmlg-case-closing` launcher skill + "Finalize Closing" = move matter folder OPEN → CLOSED FILES via Zapier (`d=wbce00ba3758d407e82d3642bfb60f5ec`). Skill re-upload no longer needed (runs in Cowork).
+3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
+4. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
+5. **Templates merge repoint** — Templates page merge dropdown still queries legacy `cases`; repoint to `matters`.
+6. **Client-side OneDrive push** — only if wanted beyond simple download.
+
+## 🔧 Pending config (firm/user actions)
+- **Leads Zap**: website form → Webhooks POST → `…/api/public/leads` with header `x-fmlg-lead-token` (token delivered in chat; not committed).
+- **Link Outlook connector** in Lovable + set Settings→Leads (intake Slack channel + notify emails) for lead alerts.
+- **Zapier Catch-Hooks** to paste into Settings: e-sign (PandaDoc/Adobe), `sharepoint_notes_webhook_url` (memo save), `leads_sharepoint_webhook_url` (lead file), `matter_sharepoint_webhook_url` (matter folder on convert). E-sign return webhook (auto status + signed-PDF write-back) still to design.
+- **Per-staff Cowork projects**: each staff sets up their Claude project per matter (Claude button) for skill handoffs.
 
 ## Dependencies & mechanisms
 - **AI (ETHICS-CRITICAL, migrating):** All FMLG skills and any AI reasoning over client data MUST run through **Claude on the firm's paid, restricted (no-training / zero-retention) plan** — **not** Lovable's built-in Gemini/GPT. Mechanism = **Claude Cowork handoff**: the app prepares inputs + a ready-to-paste prompt for the staff member's connected Cowork project (per-matter Claude button); the skill runs in Cowork; output returns to the app (paste-back or SharePoint sync) for attorney sign-off + save. ⚠️ Features currently still on Gemini/GPT and pending migration: case-info extraction, deadline derivation, case-memo generation, and vision-OCR. See "AI migration" backlog.
