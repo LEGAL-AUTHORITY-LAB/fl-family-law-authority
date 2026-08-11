@@ -53,10 +53,11 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Staff "Action needed" prompts | `staff_action_items` + `register_action_item` RPC (dedup); every manual fallback registers a tracked prompt (disco folder create+share, reviewed move, lead/matter folder, close move, memo saves); amber card per matter/lead + Dashboard widget; Mark done attributed+logged. Verified |
 
+| Client on-screen guides | 3 branded guides (Welcome / Mandatory Disclosure w/ full 12.285 collapsible / Financial Affidavit — native-form, no FL Software) in editable `portal-guides.ts`; dismissible+re-openable; surfaced on portal home, Discovery tab, FA form. Verified |
+
 ## 🔨 In progress — client-experience
-- **Client guides (#36)** — on-screen portal-invite + MD + FA guides with the request (FA guide = native form, FL Software dropped).
-- **Client PWA + notifications (#37)** — installable PWA; in-app/email/push/SMS message alerts.
 - **Client To-Do list (#38)** — auto-populates from staff requests (intake/disco/evidence/review/sign).
+- **Client PWA + notifications (#37)** — installable PWA; in-app/email/push/SMS message alerts.
 3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
 4. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
 5. **Templates merge repoint** — Templates page merge dropdown still queries legacy `cases`; repoint to `matters`.
