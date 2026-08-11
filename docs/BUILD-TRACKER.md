@@ -64,8 +64,9 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 ## 🔨 In progress
 - (none — task backlog clear)
 
+| E-sign return path | Send round-trips `signature_request_id`; secured `POST /api/public/esign-callback` (`ESIGN_CALLBACK_TOKEN`, delivered in chat) → auto status + client-task close + client notify + signed-PDF write-back (or store + Action-needed). Verified |
+
 ## ⏳ Remaining build (beyond Zapier config)
-- **E-sign return path** — provider callback → mark signed + write signed PDF back to SharePoint (currently manual status).
 - **Intake form → SharePoint save** — submitted native form → PDF → matter Intake folder (needs a Zapier hook too).
 - **Slack inbound** — staff Slack replies → portal thread (custom Slack app + `SLACK_SIGNING_SECRET` + Events URL).
 - **Templates merge repoint** — Templates dropdown still queries legacy `cases`; point at `matters`.
