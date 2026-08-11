@@ -30,9 +30,10 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 | Staff-name attribution | `profiles.display_name` + resolution (display_name→full_name→email); real staff names on activity feed, chat (staff side), doc share, discovery accept, forms actions, dashboard; editable in Settings; client chat keeps "Your legal team" alias |
 | Chat tab + Portal Messages inbox | Chat is its own tab on command center (deep-link `?tab=chat`); top-level `/messages` inbox aggregates all client threads (unread-first, snippet, relative time); `portal_thread_reads` per-staff unread; same `portal_messages` data |
 | Client doc delivery + review/comments | Staff "Deliver for review" (attorney sign-off) → client "For your review" section; `document_comments` thread both sides w/ real names; status badge Delivered→Viewed→Commented→Approved; audit columns on `documents` |
+| Scannable MD/discovery tracker | `DiscoveryTracker` grouped by 12.285 category; status chip (Complete/Partial/Outstanding/N/A) + produced/expected counts + latest date; collapsed by default; unmatched pooled in "Needs review"; summary strip. Tolson verified |
 
 ## 🔨 In progress
-- **Readable MD/discovery tracker** — group by 12.285 category, produced/outstanding, files collapsed, unmatched in "Needs review" (replace flat file dump).
+- (none — awaiting next request)
 
 ## ⏳ Backlog (prioritized)
 1. **Send for e-signature** — "Send for signature" → Zapier Catch Hook → PandaDoc (`PandaDocCLIAPI`) or Adobe Acrobat Sign (`App210820CLIAPI`); track sent→viewed→signed; signed PDF back to matter SharePoint folder. Attorney sign-off gates. Dep: Zapier webhook URL (both providers confirmed available).
