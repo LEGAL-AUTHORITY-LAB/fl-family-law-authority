@@ -31,13 +31,13 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 | Chat tab + Portal Messages inbox | Chat is its own tab on command center (deep-link `?tab=chat`); top-level `/messages` inbox aggregates all client threads (unread-first, snippet, relative time); `portal_thread_reads` per-staff unread; same `portal_messages` data |
 | Client doc delivery + review/comments | Staff "Deliver for review" (attorney sign-off) → client "For your review" section; `document_comments` thread both sides w/ real names; status badge Delivered→Viewed→Commented→Approved; audit columns on `documents` |
 | Scannable MD/discovery tracker | `DiscoveryTracker` grouped by 12.285 category; status chip (Complete/Partial/Outstanding/N/A) + produced/expected counts + latest date; collapsed by default; unmatched pooled in "Needs review"; summary strip. Tolson verified |
+| Send for e-signature | Settings E-signature (PandaDoc + Adobe Catch-Hook URLs); doc "Send for signature" w/ prefilled signer + attorney sign-off; server-side POST to hook; `signature_requests` + badge (Sent→Viewed→Signed) + manual status; return webhook (auto-status + signed-PDF write-back) still to wire. Tolson verified |
 
 ## 🔨 In progress
 - (none — awaiting next request)
 
 ## ⏳ Backlog (prioritized)
-1. **Send for e-signature** — "Send for signature" → Zapier Catch Hook → PandaDoc (`PandaDocCLIAPI`) or Adobe Acrobat Sign (`App210820CLIAPI`); track sent→viewed→signed; signed PDF back to matter SharePoint folder. Attorney sign-off gates. Dep: Zapier webhook URL (both providers confirmed available).
-2. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
+1. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
 5. **Four staff buttons / Advanced Discovery page** — dedicated OP-side surface: paste OP discovery SharePoint link → OP discovery-gap (`fmlg-discovery-gap`), income assessment (`fmlg-income-assessor` + `fmlg-fa-crosscheck`), CS/alimony/ED (`fmlg-cs-worksheet`/`fmlg-alimony-assessor`/`fmlg-ed-chart`), advanced-discovery drafting (`fmlg-advanced-discovery` + templates). Also Disco Tracker / Cert of Compliance buttons. All drafts → attorney review.
 6. **Staff Draft button** — pick doc type (freeform or dropdown by case type) → AI draft from templates/skills → attorney review.
 7. **Transcript → Memo button** — drop transcript → `fmlg-case-memo` → memo saved to matter NOTES folder. Dep: Zapier SharePoint write.
