@@ -34,8 +34,12 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 | Send for e-signature | Settings E-signature (PandaDoc + Adobe Catch-Hook URLs); doc "Send for signature" w/ prefilled signer + attorney sign-off; server-side POST to hook; `signature_requests` + badge (Sent→Viewed→Signed) + manual status; return webhook (auto-status + signed-PDF write-back) still to wire. Tolson verified |
 | Transcript → Memo | Documents "Case memos" card; input paste/upload (txt/rtf/docx/pdf/image, server-side extract + OCR); Lovable AI → 9-section FMLG memo + Archie Smokeball list; branded on-screen review (Edit/Preview) + attorney sign-off gate → `pdf-lib` branded PDF → POST to `sharepoint_notes_webhook_url` (download-only fallback); `case_memos` table. Tolson verified |
 
-## 🔨 In progress
-- **Transcript doc-link input + Claude Cowork button** — (a) add "paste doc link" (SharePoint URL) to transcript input; (b) per-matter/per-staff "Claude" button: Set up (generate matter instruction block w/ SharePoint link → paste back Cowork URL) → Open in Claude.
+| Transcript doc-link + Claude Cowork button | (a) "paste doc link" (SharePoint URL) transcript source; (b) per-matter/per-staff Claude button (`matter_claude_projects`): Set up → matter instruction block w/ SharePoint link → paste Cowork URL → Open in Claude. Tolson verified |
+
+## 🔨 In progress — AI migration (ethics pivot)
+- **Skill Launcher (#30)** — per-matter dropdown of matter-appropriate FMLG skills → builds a Cowork handoff prompt (copy + Open in Claude); no Gemini/GPT. Subsumes Draft button (#18) + Advanced Discovery (#20).
+- **Migrate memo/case-info/deadline off Gemini (#31)** — re-route generation to Cowork handoff; keep in-app render/sign-off/save.
+- **OCR decision (#32)** — move scanned-doc OCR off Gemini vision (recommend no-AI server OCR).
 
 ## ⏳ Backlog (prioritized)
 1. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
@@ -48,7 +52,7 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 11. **Client-side OneDrive push** — only if wanted beyond simple download.
 
 ## Dependencies & mechanisms
-- **AI:** Lovable built-in AI (Gemini/GPT) — no Anthropic key needed (skills run as prompts; attorney review on all output).
+- **AI (ETHICS-CRITICAL, migrating):** All FMLG skills and any AI reasoning over client data MUST run through **Claude on the firm's paid, restricted (no-training / zero-retention) plan** — **not** Lovable's built-in Gemini/GPT. Mechanism = **Claude Cowork handoff**: the app prepares inputs + a ready-to-paste prompt for the staff member's connected Cowork project (per-matter Claude button); the skill runs in Cowork; output returns to the app (paste-back or SharePoint sync) for attorney sign-off + save. ⚠️ Features currently still on Gemini/GPT and pending migration: case-info extraction, deadline derivation, case-memo generation, and vision-OCR. See "AI migration" backlog.
 - **SharePoint reads:** Lovable Microsoft SharePoint connector (read-only, lwintz@fmlgpa.com).
 - **SharePoint writes (saves/moves):** via **Zapier** Microsoft SharePoint actions (app → Zapier). No connector scope change.
 - **Slack:** connected; outbound works via connector; inbound needs a custom Slack app + signing secret.
