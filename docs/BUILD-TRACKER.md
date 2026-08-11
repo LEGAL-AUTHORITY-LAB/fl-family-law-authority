@@ -57,18 +57,29 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Client To-Do list | `client_tasks` + `reconcile_client_tasks` RPC (derived from forms/discovery-rollup/doc-review/e-sign/evidence/manual; auto-done/reopen); portal "What we need from you" + To-Do tab (deep links); staff panel (add/evidence). Tolson verified |
 
-## 🔨 In progress — client-experience
-- **Client PWA + notifications (#37)** — installable PWA; in-app/email/push/SMS message alerts.
+| Client PWA + notifications | Installable PWA (manifest + `push-sw.js`); `notifyClient` dispatcher fans to in-app (portal bell) / email (Outlook) / web push (VAPID) / SMS (`sms_webhook_url`); `client_notification_prefs` + `push_subscriptions`; triggers on chat/doc/e-sign/form/discovery/task. Verified |
+
+## 🔨 In progress
+- (none — task backlog clear)
 3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
 4. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
 5. **Templates merge repoint** — Templates page merge dropdown still queries legacy `cases`; repoint to `matters`.
 6. **Client-side OneDrive push** — only if wanted beyond simple download.
 
-## 🔧 Pending config (firm/user actions)
+## 🔧 Pending config (firm/user actions) — needed to make wired features go live
 - **Leads Zap**: website form → Webhooks POST → `…/api/public/leads` with header `x-fmlg-lead-token` (token delivered in chat; not committed).
-- **Link Outlook connector** in Lovable + set Settings→Leads (intake Slack channel + notify emails) for lead alerts.
-- **Zapier Catch-Hooks** to paste into Settings: e-sign (PandaDoc/Adobe), `sharepoint_notes_webhook_url` (memo save), `leads_sharepoint_webhook_url` (lead file), `matter_sharepoint_webhook_url` (matter folder on convert). E-sign return webhook (auto status + signed-PDF write-back) still to design.
-- **Per-staff Cowork projects**: each staff sets up their Claude project per matter (Claude button) for skill handoffs.
+- **Link Outlook connector** in Lovable → powers lead alerts + client email notifications. Set Settings→Leads (intake Slack channel + notify emails).
+- **Zapier Catch-Hooks** to paste into Settings:
+  - E-sign: PandaDoc + Adobe send hooks (retainer + document e-sign).
+  - `sharepoint_notes_webhook_url` — memo → Notes.
+  - `leads_sharepoint_webhook_url` — lead file in Leads folder.
+  - `matter_sharepoint_webhook_url` — matter folder on convert.
+  - `matter_close_webhook_url` — OPEN→CLOSED move on Close File.
+  - `disco_folder_webhook_url` / `disco_upload_webhook_url` / `disco_reviewed_webhook_url` — DISCO FROM CLIENT create / upload push / move to CLIENT REVIEWED DISCO.
+  - `sms_webhook_url` — client SMS alerts (Zapier→Twilio).
+- **Whenever a hook is unset**, the app files a tracked "Action needed" prompt (staff card + Dashboard) with manual instructions — nothing silently skipped.
+- **E-sign return webhook** (auto Sent→Signed status + signed-PDF write-back) still to design.
+- **Per-staff Cowork projects**: each staff sets up their Claude project per matter (Claude button) for skill handoffs; VAPID push keys already set.
 
 ## Dependencies & mechanisms
 - **AI (ETHICS-CRITICAL, migrating):** All FMLG skills and any AI reasoning over client data MUST run through **Claude on the firm's paid, restricted (no-training / zero-retention) plan** — **not** Lovable's built-in Gemini/GPT. Mechanism = **Claude Cowork handoff**: the app prepares inputs + a ready-to-paste prompt for the staff member's connected Cowork project (per-matter Claude button); the skill runs in Cowork; output returns to the app (paste-back or SharePoint sync) for attorney sign-off + save. ⚠️ Features currently still on Gemini/GPT and pending migration: case-info extraction, deadline derivation, case-memo generation, and vision-OCR. See "AI migration" backlog.
