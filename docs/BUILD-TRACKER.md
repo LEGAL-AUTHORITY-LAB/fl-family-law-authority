@@ -47,9 +47,13 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Close File | `fmlg-case-closing` skill; Close File card (attorney-auth confirm) → `matter_close_webhook_url` OPEN→CLOSED move + `closed_*` columns + Reopen; Clients Active/Closed/All filter; Dashboard excludes closed; Closed banner. Verified |
 
-## 🔨 In progress — Discovery intake rework
-- **Request Discovery SharePoint-native (#34)** — surface Request Discovery; ensure/create `SHARED - DISCO FROM CLIENT` per matter; portal upload → push to that folder (Zapier); staff review/approve each file → move approved to `CLIENT REVIEWED DISCO` (Zapier).
+| Request Discovery (SharePoint-native) | Prominent Request Discovery; `disco_folder_webhook_url` creates `SHARED - DISCO FROM CLIENT` (stored `matters.disco_from_client_url`); portal upload → push (`disco_upload_webhook_url`); staff Approve→move to `CLIENT REVIEWED DISCO` (`disco_reviewed_webhook_url`) / Reject→needed; `discovery_item_files.review_status`; Discovery settings section. Tolson verified |
+
+## 🔨 In progress — discovery + client-experience
 - **MD tracker re-request + multi-instance (#35)** — per-item "Re-request" for outstanding items (client notify + logged); multi-instance items (e.g. last 3 yrs tax returns → per-year check-offs) rolling up to complete.
+- **Client guides (#36)** — on-screen portal-invite + MD + FA guides with the request (FA guide = native form, FL Software dropped).
+- **Client PWA + notifications (#37)** — installable PWA; in-app/email/push/SMS message alerts.
+- **Client To-Do list (#38)** — auto-populates from staff requests (intake/disco/evidence/review/sign).
 3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
 4. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
 5. **Templates merge repoint** — Templates page merge dropdown still queries legacy `cases`; repoint to `matters`.
