@@ -72,12 +72,11 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Templates → matters + PWA icons | Templates merge repointed to `matters` (78 open, last-name sort, include-closed toggle; `mergeTemplate` uses matter+client+case_info); branded FM PWA icons (192/512/maskable/apple-touch/favicon) wired into manifest. Verified |
 
+| LawPay payments | `payment_requests` (trust vs operating forced); "Request payment (LawPay)" on leads + matter Billing card → `lawpay_request_webhook_url` (Action-needed fallback); `POST /api/public/lawpay-callback` (`LAWPAY_CALLBACK_TOKEN`) → paid flips lead paid/`signed_paid` + closes To-Do + notifies; client portal Pay button. Verified |
+
 ## ✅ Remaining build — ALL DONE
-- Every code item is complete. Non-code follow-ups only: **attorney review** of client-facing guide/legal text; optional **native App Store** wrapper later.
-3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
-4. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
-5. **Templates merge repoint** — Templates page merge dropdown still queries legacy `cases`; repoint to `matters`.
-6. **Client-side OneDrive push** — only if wanted beyond simple download.
+- Every code item is complete. Non-code follow-ups only: **attorney review** of client-facing guide/legal text.
+- **Native mobile app: parked** (user chose PWA for now). Path when wanted: Capacitor wrapper around the portal → App Store + Google Play (needs Apple $99/yr + Google $25 dev accounts + a native build/submission step outside Lovable).
 
 ## 🔧 Pending config (firm/user actions) — needed to make wired features go live
 - **Leads Zap**: website form → Webhooks POST → `…/api/public/leads` with header `x-fmlg-lead-token` (token delivered in chat; not committed).
@@ -90,6 +89,11 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
   - `matter_close_webhook_url` — OPEN→CLOSED move on Close File.
   - `disco_folder_webhook_url` / `disco_upload_webhook_url` / `disco_reviewed_webhook_url` — DISCO FROM CLIENT create / upload push / move to CLIENT REVIEWED DISCO.
   - `sms_webhook_url` — client SMS alerts (Zapier→Twilio).
+  - `form_sharepoint_webhook_url` — completed intake form PDF → Intake folder.
+  - `lawpay_request_webhook_url` — LawPay create charge/link (Zap A).
+- **LawPay:** connect LawPay in Zapier; set `LAWPAY_CALLBACK_TOKEN` secret (your value; same in Zap B header). Zap A: Catch-Hook → LawPay create link → email client + POST payment_url back to `/api/public/lawpay-callback`. Zap B: LawPay payment completed → POST `{payment_request_id,status:"paid",receipt_url}` to `/api/public/lawpay-callback`.
+- **E-sign completion Zap:** provider "document completed" → POST to `/api/public/esign-callback` (`ESIGN_CALLBACK_TOKEN`, in chat) with `signature_request_id` + status + signed PDF.
+- **Slack inbound:** set `SLACK_SIGNING_SECRET`; Slack app Event Subscriptions → `/api/public/slack/events` → subscribe `message.channels`(+`message.groups`) → invite bot to matter channels.
 - **Whenever a hook is unset**, the app files a tracked "Action needed" prompt (staff card + Dashboard) with manual instructions — nothing silently skipped.
 - **E-sign return webhook** (auto Sent→Signed status + signed-PDF write-back) still to design.
 - **Per-staff Cowork projects**: each staff sets up their Claude project per matter (Claude button) for skill handoffs; VAPID push keys already set.
