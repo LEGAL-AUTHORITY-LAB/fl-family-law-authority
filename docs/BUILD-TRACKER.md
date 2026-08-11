@@ -32,9 +32,10 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 | Client doc delivery + review/comments | Staff "Deliver for review" (attorney sign-off) → client "For your review" section; `document_comments` thread both sides w/ real names; status badge Delivered→Viewed→Commented→Approved; audit columns on `documents` |
 | Scannable MD/discovery tracker | `DiscoveryTracker` grouped by 12.285 category; status chip (Complete/Partial/Outstanding/N/A) + produced/expected counts + latest date; collapsed by default; unmatched pooled in "Needs review"; summary strip. Tolson verified |
 | Send for e-signature | Settings E-signature (PandaDoc + Adobe Catch-Hook URLs); doc "Send for signature" w/ prefilled signer + attorney sign-off; server-side POST to hook; `signature_requests` + badge (Sent→Viewed→Signed) + manual status; return webhook (auto-status + signed-PDF write-back) still to wire. Tolson verified |
+| Transcript → Memo | Documents "Case memos" card; input paste/upload (txt/rtf/docx/pdf/image, server-side extract + OCR); Lovable AI → 9-section FMLG memo + Archie Smokeball list; branded on-screen review (Edit/Preview) + attorney sign-off gate → `pdf-lib` branded PDF → POST to `sharepoint_notes_webhook_url` (download-only fallback); `case_memos` table. Tolson verified |
 
 ## 🔨 In progress
-- (none — awaiting next request)
+- **Transcript doc-link input + Claude Cowork button** — (a) add "paste doc link" (SharePoint URL) to transcript input; (b) per-matter/per-staff "Claude" button: Set up (generate matter instruction block w/ SharePoint link → paste back Cowork URL) → Open in Claude.
 
 ## ⏳ Backlog (prioritized)
 1. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
