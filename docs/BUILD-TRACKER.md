@@ -39,9 +39,7 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 | Skill Launcher | `skill-registry.ts` (13 skills, 3 categories); per-matter "Launch a skill" dropdown, matter-type recommend; builds Cowork handoff prompt (shared `matter-instructions.ts`) + inputs (OP disco link etc.) → Copy prompt & open Claude; logs launch. No Gemini/GPT. Subsumes Draft (#18) + Advanced Discovery (#20). Tolson verified |
 
 | OCR off Gemini (hybrid) | `document-text.server.ts`: native text → unpdf PDF text layer → tesseract WASM → "needs Claude" signal; no vision model, no `LOVABLE_API_KEY`. Verified network-disabled |
-
-## 🔨 In progress — AI migration (ethics pivot)
-- **Migrate memo/case-info/deadline off Gemini (#31)** — memo generation → Cowork handoff + paste-back into existing render/sign-off/save; case-info + deadline-derive → Cowork handoff, disable silent Gemini calls; full sweep to remove any remaining Gemini/GPT text calls.
+| AI migration COMPLETE | `claude-handoff.ts`; memo/case-info/deadline all Cowork-handoff; deleted case-info/intake/retainer/deadline `.server` + `ai-gateway.server` + legacy `.functions`; removed FloatingChat + `/api/chat`. **Zero non-Claude model calls over client data**; `LOVABLE_API_KEY` only for SharePoint/Slack connectors |
 
 ## 🔨 Planned — Leads module (new)
 - **Leads section (#33)** — website lead form → lands in app → notify intake staff → manual conflict check / contact / decide (free consult / paid consult / reject) via check-off buttons → on consult scheduled, create a SharePoint lead file (Zapier) → notes/transcript → memo (reuse Transcript→Memo). Manual scheduling + payment link, just check-off toggles. Ingestion mechanism + leads SharePoint location TBD.
