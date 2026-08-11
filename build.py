@@ -299,8 +299,7 @@ add_body = f"""
         <li><a href="#full">Full representation</a></li>
         <li><a href="#flat">Flat-fee representation</a></li>
         <li><a href="#limited">Limited appearance</a></li>
-        <li><a href="#gal-vs">GAL vs. Attorney ad Litem</a></li>
-        <li><a href="{root}pricing/">Full pricing menu</a></li>
+        <li><a href="{root}pricing/">Full pricing</a></li>
       </ul>
     </aside>
   </div>
@@ -310,7 +309,7 @@ add_body = f"""
   <div class="wrap">
     {subpaths([
       {"h":"Full Representation","who":"Best for contested cases","p":"We handle everything — filings, discovery, negotiation, hearings, and trial if it comes to that. The right call when the other side has a lawyer, when there's real conflict over money or the kids, or when the facts are complicated.","price":"Retainer-based · <a href='" + root + "pricing/'>see rates</a>"},
-      {"h":"Flat-Fee Representation","who":"Best for known, uncontested outcomes","p":"A single fixed price for matters with a predictable path: uncontested divorce, uncontested modifications, enforcement, prenups and postnups, step-parent adoption, and final-judgment reviews. No hourly meter, no surprise bill.","price":"Flat fee · <a href='" + root + "pricing/'>see the menu</a>"},
+      {"h":"Flat-Fee Representation","who":"Best for known, uncontested outcomes","p":"A single fixed price for matters with a predictable path: uncontested divorce, uncontested modifications, enforcement, prenups and postnups, step-parent adoption, and final-judgment reviews. No hourly meter, no surprise bill.","price":"Flat fee · <a href='" + root + "pricing/'>see pricing</a>"},
       {"h":"Limited Appearance","who":"Best for one specific hearing","p":"We appear for a single defined event — a case-management conference, an emergency motion, a specific hearing — and step out when it's done. Real representation for the moment that matters, without retaining us for the whole case.","price":"Priced per hearing · <a href='" + root + "pricing/'>see rates</a>"},
     ])}
   </div>
@@ -318,7 +317,7 @@ add_body = f"""
 
 <section class="section paper" id="flat">
   <div class="wrap measure prose">
-    <h2 id="full">What we get flat-fee</h2>
+    <h2 id="full">Matters we handle on a flat fee</h2>
     <p>These are the matters where the path is clear enough to quote a single price up front:</p>
     <ul class="lead-list">
       <li>Uncontested divorce (with or without children)</li>
@@ -328,10 +327,7 @@ add_body = f"""
       <li>Step-parent adoption</li>
       <li>Final-judgment reviews</li>
     </ul>
-    <p>Every flat fee lives on one page — our <a href="{root}pricing/">flat-fee pricing menu</a> — so you never have to reconcile two different numbers from two different pages.</p>
-
-    <h2 id="gal-vs">Guardian ad Litem vs. Attorney ad Litem</h2>
-    <p>People mix these up constantly, and most firm websites never explain the difference. A <strong>Guardian ad Litem</strong> investigates and reports to the court on what's in the child's best interest — they are not the child's lawyer. An <strong>Attorney ad Litem</strong> actually represents the child and advocates for the child's stated position, the way any lawyer represents a client. We serve in both roles, and we'll tell you which one a given case needs.</p>
+    <p>Every flat fee lives on one page — our <a href="{root}pricing/">flat-fee pricing page</a> — so you never have to reconcile two different numbers from two different pages.</p>
     <div class="callout pink"><strong>Truth + context:</strong> a lawyer isn't always the cheapest path, and it isn't always the right one. If mediation or DIY coaching fits your case better, we'll say so — see <a href="{root}ways-we-help/mediators/">Mediators</a> and <a href="{root}ways-we-help/diy-legal-coaches/">DIY Legal Coaches</a>.</div>
   </div>
 </section>
@@ -346,7 +342,7 @@ page("ways-we-help/lawyers/index.html",
 # --- Mediators ---------------------------------------------------------------
 body = f"""
 {page_hero("Mediators · Neutral settlement", "A settlement both sides can live with — in English or in Spanish",
-  "Mediation is faster and less costly than litigation, and the agreements are built to hold up in court. Both of our attorneys are Florida Supreme Court certified mediators, serving parties with or without their own lawyers — including mediation conducted entirely in Spanish.",
+  "Mediation is faster and less costly than litigation, and the agreements are built to hold up in court. Both of our attorneys are Florida Supreme Court certified mediators, serving parties with or without their own lawyers — in English or entirely in Spanish.",
   root, [("Ways we help","ways-we-help/mediators/"),("Mediators","")], tint="tint-mediators",
   ctas=[f'<a href="{CTA["mediators"]}" class="btn btn-solid">Book mediation</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See mediation rates</a>'])}
@@ -369,6 +365,15 @@ body = f"""
   </div>
 </section>
 
+<section class="section paper"><div class="wrap">
+  <div class="kicker">Your mediators</div>
+  <h2 class="h2" style="margin-bottom:20px;">Two certified mediators, with real courtroom perspective</h2>
+  <div class="cards">
+    <div class="card"><span class="sw" style="background:var(--teal)"></span><h3>Leisa Wintz</h3><p>Florida Supreme Court Certified Mediator and Collaborative Divorce Advocate, with a Master's in Marriage &amp; Family Therapy — she reads the family system underneath the dispute. <a href="{root}attorneys/leisa-wintz/">Full bio →</a></p></div>
+    <div class="card"><span class="sw" style="background:var(--teal)"></span><h3>Nazarena Hauser</h3><p>Certified mediator and head of the firm's litigation since 2017 — she mediates in English or entirely in Spanish, backed by real trial experience. <a href="{root}attorneys/nazarena-hauser/">Full bio →</a></p></div>
+  </div>
+</div></section>
+
 <section class="section dim">
   <div class="wrap">
     <div class="kicker center">For referring attorneys</div>
@@ -387,7 +392,7 @@ page("ways-we-help/mediators/index.html",
 # --- DIY Legal Coaches -------------------------------------------------------
 body = f"""
 {page_hero("DIY Legal Coaches · Represent yourself, not alone", "Handle your own case with a lawyer coaching you through it",
-  "Represent yourself with a licensed Florida attorney coaching you on strategy, paperwork, and courtroom prep — at a fraction of full representation. Transparent flat fees for individual tasks, plus monthly subscription plans for ongoing support.",
+  "Represent yourself with a licensed Florida attorney coaching you on strategy, paperwork, and courtroom prep — at a fraction of full representation. Transparent flat fees for the specific tasks you need: pay for what you need, not a subscription.",
   root, [("Ways we help","ways-we-help/diy-legal-coaches/"),("DIY Legal Coaches","")], tint="tint-coaches",
   ctas=[f'<a href="{CTA["coaches"]}" class="btn btn-solid">Start coaching</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See coaching prices</a>'])}
@@ -396,12 +401,12 @@ body = f"""
   <div class="wrap measure prose">
     <div class="kicker">How it works</div>
     <h2>You run the case. We make sure you don't run it into a wall.</h2>
-    <p>Plenty of people can handle their own Florida family case — they just shouldn't do it blind. DIY Legal Coaching gives you a licensed attorney to review documents, plan strategy, prep you for hearings, and catch the mistakes that quietly sink pro se cases: bad time-sharing language, missed disclosures, unenforceable terms.</p>
-    <h2>Pay per task, or subscribe</h2>
-    <p>Flat fees by service — document review, parenting-plan prep, child-support strategy, MSA review, evidentiary-hearing prep, and more — so you only pay for the help you need. Prefer ongoing support? Our <strong>Essentials</strong> and <strong>Plus</strong> monthly plans (3-, 6-, and 12-month terms) give you a standing coaching relationship. Every price is on the <a href="{root}pricing/">pricing page</a>.</p>
-    <div class="callout orange"><strong>$250 consultation, credited.</strong> Your initial consult fee is credited toward any retainer over $2,500. Fees are non-refundable but flexible for upgrades, a conflict check is required before we start, and plans carry a simple 30-day cancellation notice — no fine-print surprises.</div>
+    <p>Plenty of people can handle their own Florida family case — they just shouldn't do it alone. DIY Legal Coaching gives you a licensed attorney to review documents, plan strategy, prep you for hearings, and catch the mistakes that quietly sink pro se cases: bad time-sharing language, missed disclosures, unenforceable terms.</p>
+    <h2>Pay for what you need</h2>
+    <p>Flat fees by service — document review, parenting-plan prep, child-support strategy, MSA review, evidentiary-hearing prep, and more — so you only pay for the help you actually use. For ongoing help, you can pay into a <strong>retainer</strong> we bill against as you ask us to do things — coaching-style, not full representation. Every price is on the <a href="{root}pricing/">pricing page</a>.</p>
+    <div class="callout orange"><strong>$250 consultation, credited.</strong> Your initial consult fee is credited toward any retainer over $2,500. Fees are non-refundable but flexible for upgrades, a conflict check is required before we start, and retainer engagements carry a simple 30-day notice — no fine-print surprises.</div>
     <h2>Pair it with paralegal drafting</h2>
-    <p>Our <a href="{root}ways-we-help/paralegal-services/">paralegals prepare your documents. Coaching teaches you what they mean.</a> Together they're a genuinely affordable way to get a Florida case done right without full representation.</p>
+    <p>Here's the difference: your documents are <strong>built by our attorneys and reviewed by our attorneys</strong> — not handed off to an independent paralegal working from a generic template. Our <a href="{root}ways-we-help/paralegal-services/">paralegals prepare your documents; coaching teaches you what they mean.</a> Together they're a genuinely affordable way to get a Florida case done right without full representation.</p>
   </div>
 </section>
 
@@ -411,18 +416,18 @@ body = f"""
     <h2 class="h2" style="margin-bottom:20px;">Courses, templates &amp; toolkits</h2>
     <div class="cards">
       <div class="card"><span class="sw" style="background:var(--orange)"></span><h3>On-demand courses</h3><p>Self-paced walkthroughs of Florida divorce, custody, and discovery.</p></div>
-      <div class="card"><span class="sw" style="background:var(--teal)"></span><h3>Document templates</h3><p>Attorney-built forms and checklists you can actually use.</p></div>
-      <div class="card"><span class="sw" style="background:var(--pink)"></span><h3>Coaching subscription</h3><p>Ongoing access to a licensed attorney, month to month.</p></div>
+      <div class="card"><span class="sw" style="background:var(--teal)"></span><h3>Document templates</h3><p>Attorney-built forms — a couple free, the rest available to purchase one at a time.</p></div>
+      <div class="card"><span class="sw" style="background:var(--pink)"></span><h3>Attorney coaching</h3><p>One-on-one strategy with a licensed attorney — per task or on retainer.</p></div>
     </div>
     <div class="mt-m"><a href="{CTA['coaches']}" class="btn btn-solid" style="background:var(--orange);box-shadow:0 12px 28px rgba(251,92,14,.34);">Browse the shop</a></div>
   </div>
 </section>
 
-{cta_band(root,"orange","Do it yourself — just not blind.","Start with a coaching consult and we'll map your whole case.","Start coaching",CTA["coaches"])}
+{cta_band(root,"orange","Do it yourself — just not alone.","Start with a coaching consult and we'll map your whole case.","Start coaching",CTA["coaches"])}
 """
 page("ways-we-help/diy-legal-coaches/index.html",
      "DIY Legal Coaches — Attorney-Coached Self-Representation | Family Matters Law Group",
-     "Represent yourself in your Florida family case with a licensed attorney coaching you: flat-fee tasks and monthly subscription plans.",
+     "Represent yourself in your Florida family case with a licensed attorney coaching you: flat-fee tasks and retainer-based coaching.",
      body, active="ways")
 
 # --- Guardians ad Litem ------------------------------------------------------
@@ -463,6 +468,8 @@ body = f"""
   <div class="wrap measure prose">
     <h2>Expertise where it's needed most</h2>
     <p>Our GAL work draws on real depth in high-conflict parenting and substance-abuse dynamics, plus a family-therapy background that helps a neutral read a family accurately rather than just reading the file. For the full walkthrough — including how appointment and reporting work — see the <a href="{root}blog/guardian-ad-litem-guide/">complete GAL guide</a>.</p>
+    <h2>Guardian ad Litem vs. Attorney ad Litem</h2>
+    <p>People mix these up constantly, and most firm websites never explain the difference. A <strong>Guardian ad Litem</strong> investigates and reports to the court on what's in the child's best interest — they are not the child's lawyer. An <strong>Attorney ad Litem</strong> actually represents the child and advocates for the child's stated position, the way any lawyer represents a client. We serve in both roles, and we'll tell you which one a given case needs.</p>
     <div class="callout chartreuse"><strong>Already appointed to your case?</strong> Active-client tools — evidence upload, the client portal, and your order of appointment — live in the <a href="{root}current-clients/">Current Clients</a> area, kept separate from this public page.</div>
   </div>
 </section>
@@ -739,7 +746,7 @@ main = f"""
     <li>Expense reimbursement and how it's handled</li>
     <li>Right of first refusal for childcare</li>
   </ul>
-  <div class="callout"><strong>Pricing, plainly:</strong> uncontested plans and modifications generally start around $2,500; contested matters through mediation from about $6,000; individual DIY drafting pieces are priced separately. Everything is on the <a href="{root}pricing/">pricing page</a>.</div>
+  <div class="callout"><strong>Pricing, plainly:</strong> a DIY parenting plan with attorney drafting starts around $2,500; an agreed divorce with children, or a modification, is a $5,000 flat fee; fully contested matters are retainer-based and scoped by phase. Everything is on the <a href="{root}pricing/">pricing page</a>.</div>
 </div></section>
 """
 build_topic("custody-and-parenting",
@@ -961,62 +968,69 @@ body = f"""
     <thead><tr><th>Service</th><th>Best for</th><th>Fee</th></tr></thead>
     <tbody>
       <tr><td>Full representation</td><td>Contested cases</td><td class="price">Retainer-based</td></tr>
-      <tr><td>Uncontested divorce — no kids/property</td><td>Simple, agreed</td><td class="price">from $3,500</td></tr>
-      <tr><td>Uncontested divorce — with kids/property</td><td>Agreed, more moving parts</td><td class="price">from $5,000</td></tr>
-      <tr><td>Uncontested modification</td><td>Agreed change to an order</td><td class="price">flat fee</td></tr>
-      <tr><td>Enforcement</td><td>Making an order stick</td><td class="price">flat fee</td></tr>
-      <tr><td>Prenuptial / postnuptial agreement</td><td>Planning ahead</td><td class="price">flat fee</td></tr>
-      <tr><td>Step-parent adoption</td><td>Growing your family</td><td class="price">flat fee</td></tr>
+      <tr><td>Uncontested divorce — no kids, no property</td><td>Simple, agreed (paralegal-prepared paperwork)</td><td class="price">from $3,500</td></tr>
+      <tr><td>Uncontested divorce — with kids</td><td>Agreed, with children</td><td class="price">$5,000</td></tr>
+      <tr><td>Modification (contested or uncontested)</td><td>Any petition to change an order</td><td class="price">$5,000</td></tr>
+      <tr><td>Contempt and/or Enforcement</td><td>Making an order stick</td><td class="price">$5,000</td></tr>
+      <tr><td>Prenuptial / postnuptial agreement</td><td>Planning ahead</td><td class="price">$3,500</td></tr>
+      <tr><td>Step-parent adoption</td><td>Growing your family</td><td class="price">from $3,500</td></tr>
     </tbody>
   </table></div>
 </div></section>
 
-<section class="section dim"><div class="wrap">
-  <div class="kicker">Limited appearance — priced per hearing</div>
-  <h2 class="h2" style="margin-bottom:8px;">One hearing at a time</h2>
-  <div class="table-scroll"><table class="ptable">
-    <thead><tr><th>Appearance</th><th>Fee</th></tr></thead>
-    <tbody>
-      <tr><td>Case-management conference</td><td class="price">$500</td></tr>
-      <tr><td>Emergency motion</td><td class="price">$2,500</td></tr>
-      <tr><td>Other single hearings</td><td class="price">priced per hearing</td></tr>
-    </tbody>
-  </table></div>
+<section class="section dim"><div class="wrap measure prose">
+  <div class="kicker">Limited appearance</div>
+  <h2 class="h2" style="margin-bottom:14px;">One hearing at a time</h2>
+  <p>For <strong>existing coaching clients</strong>, we can step in for a single, defined event — a case-management conference, a specific motion or hearing — quoted case-by-case for that appearance. It isn't a standalone service you select on your own; we scope and price it with you.</p>
+  <div class="callout pink"><strong>Please note:</strong> flat-fee and limited-appearance representation are offered at our discretion and require a <strong>paid consultation</strong> — we confirm the scope and approve the engagement before either is available.</div>
 </div></section>
 
 <section class="section paper"><div class="wrap">
-  <div class="kicker">Divorce &amp; custody, by path</div>
-  <h2 class="h2" style="margin-bottom:8px;">Uncontested to contested</h2>
+  <div class="kicker">DIY &amp; uncontested divorce</div>
+  <h2 class="h2" style="margin-bottom:8px;">Do it yourself, at the level you want</h2>
   <div class="table-scroll"><table class="ptable">
     <thead><tr><th>Path</th><th>Fee</th></tr></thead>
     <tbody>
       <tr><td>DIY divorce — paralegal-drafted</td><td class="price">from $499</td></tr>
       <tr><td>DIY divorce — with attorney drafting</td><td class="price">from $2,500</td></tr>
       <tr><td>Full-service uncontested divorce</td><td class="price">from $3,500</td></tr>
-      <tr><td>Uncontested parenting plan / modification</td><td class="price">from $2,500</td></tr>
-      <tr><td>Contested custody through mediation</td><td class="price">from $6,000</td></tr>
     </tbody>
   </table></div>
 </div></section>
 
 <section class="section dim"><div class="wrap">
+  <div class="kicker">Contested matters — flat fees by phase</div>
+  <h2 class="h2" style="margin-bottom:8px;">Scoped by phase, quoted individually</h2>
+  <p class="measure" style="color:var(--muted);margin-bottom:20px;">Flat fees are available for contested cases — through mediation or full representation — priced one phase at a time, so you only commit to the next step.</p>
+  <div class="table-scroll"><table class="ptable">
+    <thead><tr><th>Phase</th><th>Fee</th></tr></thead>
+    <tbody>
+      <tr><td>Drafting</td><td class="price">flat fee, quoted per matter</td></tr>
+      <tr><td>Discovery</td><td class="price">flat fee, quoted per matter</td></tr>
+      <tr><td>Mediation prep &amp; attendance</td><td class="price">flat fee, quoted per matter</td></tr>
+      <tr><td>Evidentiary / final hearing prep &amp; attendance</td><td class="price">flat fee, quoted per matter</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<section class="section paper"><div class="wrap">
   <div class="kicker">DIY coaching, paralegal &amp; mediation</div>
-  <h2 class="h2" style="margin-bottom:8px;">Pay for exactly what you need</h2>
+  <h2 class="h2" style="margin-bottom:8px;">A flat fee for a defined service — or a retainer we bill against</h2>
   <div class="table-scroll"><table class="ptable">
     <thead><tr><th>Service</th><th>Fee</th></tr></thead>
     <tbody>
       <tr><td>Paralegal document preparation (per document)</td><td class="price">$350–$500</td></tr>
       <tr><td>DIY Legal Coaching — per task</td><td class="price">flat fee by service</td></tr>
-      <tr><td>DIY Legal Coaching — subscription (Essentials / Plus)</td><td class="price">monthly, 3/6/12-mo terms</td></tr>
+      <tr><td>DIY Legal Coaching — retainer</td><td class="price">pay into a retainer, billed against requested work</td></tr>
       <tr><td>Initial consultation</td><td class="price">$250 (credited toward retainers over $2,500)</td></tr>
       <tr><td>Mediation</td><td class="price">hourly, sliding scale by combined income</td></tr>
       <tr><td>Parenting coordination</td><td class="price">$375–$450/hr sliding scale</td></tr>
     </tbody>
   </table></div>
-  <p class="mt-m" style="color:var(--muted);font-size:14px;max-width:60ch;">Terms: coaching fees are non-refundable but flexible for upgrades; a conflict check is required before we begin; subscriptions carry a 30-day cancellation notice.</p>
+  <p class="mt-m" style="color:var(--muted);font-size:14px;max-width:60ch;">Terms: coaching fees are non-refundable but flexible for upgrades; a conflict check is required before we begin; retainer engagements carry a 30-day cancellation notice.</p>
 </div></section>
 
-{cta_band(root,"pink","Not sure where you land on this menu?","The intake quiz routes you to the right service; a consult confirms the exact fee.","Get started",CTA["get_started"])}
+{cta_band(root,"pink","Not sure where you land on the options?","Answer a few quick questions and we'll point you to the right one — no hard sell.","Find your fit",CTA["get_started"])}
 """
 page("pricing/index.html", "Flat-Fee Pricing | Family Matters Law Group",
      "One canonical pricing page for Family Matters Law Group: representation, limited appearance, DIY, paralegal, mediation, and coaching fees.",
@@ -1045,7 +1059,7 @@ body = f"""
 
 <section class="section dim"><div class="wrap measure prose">
   <h2>Bilingual, and proud of it</h2>
-  <p>This is a South Florida firm. We practice fully bilingually — including mediation and litigation conducted entirely in Spanish — and we run a Spanish-language presence at <a href="{SPANISH}">abogada-familiar.com</a>. Se habla español, no asterisk.</p>
+  <p>This is a South Florida firm. We work in English and in Spanish — fully bilingual, including mediation and litigation conducted entirely in Spanish when you prefer — and we run a Spanish-language presence at <a href="{SPANISH}">abogada-familiar.com</a>. Se habla español, no asterisk.</p>
   <p>Founded in 2010, the firm has grown into a real team with real depth — and genuine off-site standing: <strong>4.5 stars across 151 reviews</strong>. Read them on our <a href="{root}reviews/">reviews page</a>.</p>
 </div></section>
 
@@ -1079,7 +1093,7 @@ body = f"""
       <div class="attorney-photo" role="img" aria-label="Attorney Nazarena Hauser" style="background-image:url('{root}assets/images/{NAZ_IMG}')"></div>
       <div class="attorney-body">
         <h3>Nazarena Hauser</h3><div class="role">Head of Litigation</div>
-        <p>Leads the firm's litigation since 2017 and practices fully bilingually — including mediation conducted entirely in Spanish. Past President of the Broward County Hispanic Bar Association and a Broward Bar "40 Under 40."</p>
+        <p>Leads the firm's litigation since 2017 and works in English and in Spanish — fully bilingual, including mediation entirely in Spanish. Past President of the Broward County Hispanic Bar Association and a Broward Bar "40 Under 40."</p>
         <div class="creds"><span>Head of Litigation</span><span>Certified Mediator</span><span>Bilingual — Español</span><span>40 Under 40</span></div>
         <a class="link" href="{root}attorneys/nazarena-hauser/">Read Nazarena's story <span class="arrow">→</span></a>
       </div>
@@ -1120,6 +1134,10 @@ body = f"""
       <li>Guardian ad Litem</li>
       <li>Collaborative Divorce Advocate</li>
     </ul>
+    <h2>Positions &amp; honors</h2>
+    <ul class="lead-list">
+      <li>Two years as co-chair of the Family Law Section, Broward County Bar Association</li>
+    </ul>
     <p>Read Leisa on <a href="{root}blog/family-systems-in-mediation/">why a family-systems background changes the way she mediates</a>.</p>
   </div>
   <aside class="aside-card">
@@ -1140,16 +1158,18 @@ page("attorneys/leisa-wintz/index.html", "Leisa Wintz, Founding Attorney | Famil
 
 body = f"""
 {page_hero("Head of Litigation", "Nazarena Hauser",
-  "Head of litigation since 2017, past President of the Broward County Hispanic Bar Association, Broward Bar 40 Under 40 — and a fully bilingual practice, including mediation entirely in Spanish.",
+  "Head of litigation since 2017, past President of the Broward County Hispanic Bar Association, Broward Bar 40 Under 40, Guardian ad Litem — and a fully bilingual practice in English and Spanish.",
   root, [("Team","team/"),("Nazarena Hauser","")], tint="tint-mediators")}
 <section class="section paper"><div class="wrap split">
   <div class="prose">
     <p>Nazarena Hauser has led the firm's litigation since 2017. Her community standing is real and verifiable: <strong>past President of the Broward County Hispanic Bar Association (2022–23)</strong>, Chair of its Hispanic Lawyers Committee, a <strong>2023 CAHM Culture Award</strong>, and Broward Bar's <strong>40 Under 40 (2021)</strong>.</p>
-    <p>She practices <strong>fully bilingually</strong> — including mediation conducted entirely in Spanish — a genuine, well-supported differentiator for the South Florida market, not a line on a brochure. When a family's biggest decisions are being negotiated, no one at her table has to do it in their second language.</p>
+    <p>She offers her services in <strong>English and in Spanish</strong> — fully bilingual, including mediation conducted entirely in Spanish. When a family's biggest decisions are being negotiated, no one at her table has to do it in their second language.</p>
+    <p>Beyond litigation and mediation, Nazarena serves as a <strong>Guardian ad Litem</strong>, advocating for the best interests of children in high-conflict cases — and she mentors and coaches other family-law attorneys through <strong>Legal Authority Lab</strong>.</p>
     <h2>Focus</h2>
     <ul class="lead-list">
       <li>Contested divorce and custody litigation</li>
       <li>Certified mediation — English or Spanish</li>
+      <li>Guardian ad Litem</li>
       <li>Enforcement and modification</li>
     </ul>
     <p>Nazarena also writes at the firm's Spanish-language site, <a href="{SPANISH}">abogada-familiar.com</a>.</p>
@@ -1167,7 +1187,7 @@ body = f"""
 </div></section>
 """
 page("attorneys/nazarena-hauser/index.html", "Nazarena Hauser, Head of Litigation | Family Matters Law Group",
-     "Nazarena Hauser — head of litigation, past President of the Broward County Hispanic Bar Association, and a fully bilingual (Spanish) family law practice.",
+     "Nazarena Hauser — head of litigation, Guardian ad Litem, past President of the Broward County Hispanic Bar Association, with a fully bilingual family law practice in English and Spanish.",
      body, active="")
 
 print("about/team/bios queued")
@@ -1515,7 +1535,7 @@ home_body = f"""
 </div></section>
 
 <section class="editorial"><div class="editorial-bg"></div><div class="wrap editorial-inner">
-  <blockquote class="reveal">"Most people don't need to be talked into a lawsuit. They need someone to tell them, plainly, what happens next — and what it's going to cost to get there."</blockquote>
+  <blockquote class="reveal">"Most people don't need to be talked into anything. They need someone to tell them, plainly, what happens next — and what it's going to cost to get there."</blockquote>
   <cite>— Leisa Wintz, Founding Attorney</cite>
 </div></section>
 
@@ -1530,9 +1550,9 @@ home_body = f"""
 </div></section>
 
 <section class="shop" id="shop"><div class="wrap">
-  <div><span class="eyebrow">DIY Legal Shop</span><h2 class="display">Do it yourself. Just not blind.</h2>
+  <div><span class="eyebrow">DIY Legal Shop</span><h2 class="display">Do it yourself. Just not alone.</h2>
     <p>On-demand courses, templates, and toolkits to navigate Florida family court with confidence — paired with coaching whenever you want a licensed attorney in your corner.</p>
-    <div class="shop-list"><span class="shop-tag">Courses</span><span class="shop-tag">Document templates</span><span class="shop-tag">Toolkits &amp; guides</span><span class="shop-tag">Monthly subscription</span></div></div>
+    <div class="shop-list"><span class="shop-tag">Courses</span><span class="shop-tag">Document templates</span><span class="shop-tag">Toolkits &amp; guides</span><span class="shop-tag">Attorney coaching</span></div></div>
   <div class="shop-cta"><div class="shop-mug" role="img" aria-label="DIY Legal Coaching"><span><span class="m1">DIY Legal</span><span class="m2">Coaching</span></span></div></div>
 </div><div class="wrap" style="margin-top:34px;position:relative;z-index:2;">
   <a href="{root}ways-we-help/diy-legal-coaches/" class="btn btn-solid" style="background:var(--orange);box-shadow:0 12px 28px rgba(251,92,14,.34);">Browse the shop</a>
@@ -1549,7 +1569,7 @@ home_body = f"""
         <a class="link" href="{root}attorneys/leisa-wintz/">Read Leisa's story <span class="arrow">→</span></a></div></article>
     <article class="attorney" data-who="both"><div class="attorney-photo" role="img" aria-label="Attorney Nazarena Hauser" style="background-image:url('{root}assets/images/{NAZ_IMG}')"></div>
       <div class="attorney-body"><h3>Nazarena Hauser</h3><div class="role">Head of Litigation</div>
-        <p>Leads the firm's litigation since 2017 and practices fully bilingually — including mediation conducted entirely in Spanish. Past President of the Broward County Hispanic Bar Association and a Broward Bar "40 Under 40."</p>
+        <p>Leads the firm's litigation since 2017 and works in English and in Spanish — fully bilingual, including mediation entirely in Spanish. Past President of the Broward County Hispanic Bar Association and a Broward Bar "40 Under 40."</p>
         <div class="creds"><span>Head of Litigation</span><span>Certified Mediator</span><span>Bilingual — Español</span><span>40 Under 40</span></div>
         <a class="link" href="{root}attorneys/nazarena-hauser/">Read Nazarena's story <span class="arrow">→</span></a></div></article>
   </div>
