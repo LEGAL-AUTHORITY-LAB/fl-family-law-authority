@@ -43,9 +43,10 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Leads module (full) | 5 stages: public Zapier intake endpoint (token) + in-app/Slack/Outlook alerts; triage toggles + Free/Paid/Reject decision + SharePoint lead file; consult memo (Claude handoff → branded PDF → SharePoint); retainer (`fmlg-retainer` skill) + lead-scoped e-sign + payment + `signed_paid` roll-up; **Convert to Client** (atomic RPC, client dedup, memo/retainer carry-over, matter-folder Zapier, double-convert guard). No AI in-app |
 
+| Sync to SharePoint (tracker) | Two-stage: Stage 1 deterministic parse of an existing tracker spreadsheet (SheetJS → `discovery_items`, conflict-flagged) or "Reconcile in Claude" for unstructured docs; Stage 2 optional full recursive folder scan + merge; change summary + audit. No AI. Tolson verified |
+
 ## ⏳ Backlog (prioritized)
-1. **"Sync to SharePoint" on tracker pages (#29)** — Stage 1: ingest an existing tracker doc already in the matter folder; Stage 2: prompt for optional full folder scan; merge + show what changed.
-2. **Close File (#14)** — now Cowork-native: `fmlg-case-closing` launcher skill + "Finalize Closing" = move matter folder OPEN → CLOSED FILES via Zapier (`d=wbce00ba3758d407e82d3642bfb60f5ec`). Skill re-upload no longer needed (runs in Cowork).
+1. **Close File (#14)** — now Cowork-native: `fmlg-case-closing` launcher skill + "Finalize Closing" = move matter folder OPEN → CLOSED FILES via Zapier (`d=wbce00ba3758d407e82d3642bfb60f5ec`). Skill re-upload no longer needed (runs in Cowork).
 3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
 4. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
 5. **Templates merge repoint** — Templates page merge dropdown still queries legacy `cases`; repoint to `matters`.
