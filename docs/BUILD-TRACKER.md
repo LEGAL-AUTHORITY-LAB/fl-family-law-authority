@@ -43,9 +43,10 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 ## 🔨 In progress — Leads module (#33)
 - **Stage 1 DONE** — `leads` table + staff RLS; public intake `POST /api/public/leads` (token-protected, flexible field mapping, `raw_payload`); Slack + Outlook new-lead alerts (config in Settings→Leads); Leads sidebar → inbox (status filters) → `/leads/$leadId` detail (status/assignee/notes, audit-logged). Endpoint URL + token delivered in chat (token NOT committed). Outlook connector must be linked + Settings emails/channel set for alerts.
-- **Stage 2 (next)** — triage checklist (conflict-check/contacted toggles) + decision Free/Paid consult / Reject; on consult scheduled create SharePoint lead file via Zapier (leads folder) + Settings webhook field.
-- **Stage 3** — consult memo (lead-scoped Claude handoff + paste-back/save) + retainer (Claude skill) + send for e-sign + manual payment-link toggles.
-- **Stage 4** — Convert to Client (create client+matter, carry lead form/memo/contact, mark converted).
+- **Stage 2 DONE** — triage toggles (conflict-check/contacted, attributed) + decision Free/Paid consult / Reject(reason); inbox Active default + consult badges; on consult scheduled → SharePoint lead file via `leads_sharepoint_webhook_url` (idempotent, non-blocking).
+- **Stage 3 (next)** — consult memo for leads (transcript → Claude handoff → paste-back → branded PDF → save to lead SharePoint file).
+- **Stage 4** — retainer (Claude skill handoff) + send for e-sign + manual payment link + toggles (retainer_sent/signed/paid).
+- **Stage 5** — Convert to Client (create client+matter, carry lead form/memo/contact, mark converted).
 
 ## ⏳ Backlog (prioritized)
 1. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
