@@ -50,7 +50,7 @@ TEAM_TRIO = photo("team-trio.jpg", "team-three.jpg", default="")
 
 # Feature photos for service / about / coparenting pages (fall back to nothing).
 FEAT_LAWYERS   = photo("svc-lawyers.jpg", default="")
-FEAT_MEDIATORS = photo("svc-mediators.jpg", default="")
+FEAT_MEDIATORS = photo("mediation-duo.jpg", "svc-mediators.jpg", default="")
 FEAT_COACHES   = photo("svc-coaches.jpg", default="")
 FEAT_GAL       = photo("svc-gal.jpg", default="")
 FEAT_ABOUT     = photo("about-duo.jpg", default="")
@@ -170,10 +170,10 @@ def footer(root):
     </div>
     <div>
       <h4>Learn</h4>
-      <a href="{root}topics/divorce/">Divorce</a>
-      <a href="{root}topics/custody-and-parenting/">Custody &amp; Parenting</a>
+      <a href="{root}learn/">Learn hub</a>
       <a href="{root}blog/">Blog &amp; Guides</a>
       <a href="{root}glossary/">Legal Glossary</a>
+      <a href="{root}shop/">DIY Legal Shop</a>
     </div>
     <div>
       <h4>Firm</h4>
@@ -247,6 +247,84 @@ def cta_band(root, color, h, p, label, href):
     </div>
   </div>
 </section>"""
+
+
+def path_finder(root):
+    """Interactive 'which service fits you' router for the Get Started page."""
+    import json
+    routes = {
+        "lawyers":   CTA["lawyers"],
+        "mediators": root + "ways-we-help/mediators/#book",
+        "coaches":   CTA["coaches"],
+        "gal":       CTA["gal"],
+        "consult":   CTA["get_started"],
+    }
+    tpl = r"""
+<section class="section paper"><div class="wrap measure">
+  <div class="pathfinder" id="pathfinder" data-routes='__ROUTES__'>
+    <div class="kicker center">30-second path finder</div>
+    <h2 class="h2 center" style="margin-bottom:6px;">Find the right starting point</h2>
+    <p class="center" style="color:var(--muted);margin:0 auto 22px;">Two quick questions. No email required.</p>
+    <div class="pf-stage" aria-live="polite"><p class="center" style="color:var(--muted);margin:0;">Loading the finder&hellip; if it doesn&rsquo;t appear, <a href="#routes">choose your route below</a>.</p></div>
+    <div class="pf-foot"><button type="button" class="pf-back btn btn-outline" hidden>&larr; Back</button></div>
+  </div>
+</div></section>
+<script>
+(function(){
+  var pf=document.getElementById('pathfinder'); if(!pf) return;
+  var ROUTES=JSON.parse(pf.getAttribute('data-routes'));
+  var Q=[
+    {id:'q1', q:"What's going on?", a:[
+      {t:"Divorce or separation", next:'q2'},
+      {t:"Custody, time-sharing, or child support", next:'q2'},
+      {t:"A child in a case needs an independent advocate", result:'gal'},
+      {t:"I know my issue — I just want help doing it myself", result:'coaches'}
+    ]},
+    {id:'q2', q:"How much do you and the other side agree?", a:[
+      {t:"We mostly agree — I want it settled and enforceable", result:'mediators'},
+      {t:"We disagree on a lot, or there's real conflict", result:'lawyers'},
+      {t:"I'd rather not hire a lawyer — just coach me through it", result:'coaches'}
+    ]}
+  ];
+  var R={
+    lawyers:{c:'var(--pink)', h:'A lawyer to handle it', p:"When there's real conflict, you want an advocate driving the case — full or flat-fee representation for divorce, custody, and support.", cta:'Start intake', key:'lawyers'},
+    mediators:{c:'var(--teal)', h:'Mediation', p:"You're close enough to agree. A certified, bilingual mediator gets you a settlement that holds up in court — faster and cheaper than a fight.", cta:'Book mediation', key:'mediators'},
+    coaches:{c:'var(--orange)', h:'Do it yourself, with an attorney behind you', p:"Run your own case with a licensed attorney drafting, reviewing, and prepping you — per task or on a retainer.", cta:'Start coaching', key:'coaches'},
+    gal:{c:'var(--chartreuse)', h:'A voice for the kids', p:"Request a Guardian ad Litem — a court-appointed advocate focused on the children's best interests.", cta:'Request a GAL', key:'gal'}
+  };
+  var stage=pf.querySelector('.pf-stage'), back=pf.querySelector('.pf-back'), hist=[];
+  function renderQ(id){
+    var q=Q.filter(function(x){return x.id===id;})[0];
+    var h='<div class="pf-q"><h3 class="pf-qh">'+q.q+'</h3><div class="pf-opts">';
+    q.a.forEach(function(o,i){ h+='<button type="button" class="pf-opt" data-i="'+i+'">'+o.t+'</button>'; });
+    h+='</div></div>'; stage.innerHTML=h;
+    stage.querySelectorAll('.pf-opt').forEach(function(b){
+      b.addEventListener('click',function(){
+        var o=q.a[+b.getAttribute('data-i')];
+        hist.push(id); back.hidden=false;
+        if(o.result){ renderR(o.result); } else { renderQ(o.next); }
+      });
+    });
+  }
+  function renderR(key){
+    var r=R[key];
+    stage.innerHTML='<div class="pf-result" style="border-top:4px solid '+r.c+';">'+
+      '<div class="kicker" style="color:'+r.c+';">Your starting point</div>'+
+      '<h3 class="pf-rh">'+r.h+'</h3><p class="pf-rp">'+r.p+'</p>'+
+      '<div class="pf-ract"><a class="btn btn-solid" href="'+ROUTES[r.key]+'">'+r.cta+'</a>'+
+      '<a class="btn btn-outline" href="'+ROUTES.consult+'">Not sure? Book a $250 consult</a></div></div>';
+    back.hidden=false;
+  }
+  back.addEventListener('click',function(){
+    var prev=hist.pop(); if(prev===undefined){ return; }
+    if(hist.length===0){ back.hidden=true; }
+    renderQ(prev);
+  });
+  renderQ('q1');
+})();
+</script>
+"""
+    return tpl.replace("__ROUTES__", json.dumps(routes))
 
 
 def faq(items):
@@ -344,7 +422,7 @@ body = f"""
 {page_hero("Mediators · Neutral settlement", "A settlement both sides can live with — in English or in Spanish",
   "Mediation is faster and less costly than litigation, and the agreements are built to hold up in court. Both of our attorneys are Florida Supreme Court certified mediators, serving parties with or without their own lawyers — in English or entirely in Spanish.",
   root, [("Ways we help","ways-we-help/mediators/"),("Mediators","")], tint="tint-mediators",
-  ctas=[f'<a href="{CTA["mediators"]}" class="btn btn-solid">Book mediation</a>',
+  ctas=[f'<a href="#book" class="btn btn-solid">Book mediation</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See mediation rates</a>'])}
 {feature(root, FEAT_MEDIATORS)}
 <section class="section paper">
@@ -382,7 +460,18 @@ body = f"""
   </div>
 </section>
 
-{cta_band(root,"teal","Ready to settle instead of fight?","Book directly with our mediation team — English or Spanish.","Book mediation",CTA["mediators"])}
+<section class="section paper" id="book"><div class="wrap measure prose">
+  <div class="kicker">Book your mediation</div>
+  <h2>Reserve a half day or a full day</h2>
+  <p>Most matters settle in a single session. Choose the block that fits your case and book directly with our mediation team — you'll get confirmation and prep details by email. Not sure which you need? Book a half day; we'll tell you honestly if your case calls for more time.</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;">
+    <a href="https://calendly.com/leisawintz/mediation-half-day" class="btn btn-solid">Book a half day</a>
+    <a href="https://calendly.com/leisawintz/mediation-full-day" class="btn btn-outline">Book a full day</a>
+  </div>
+  <p class="mt-s" style="color:var(--muted);font-size:.95rem;">Mediation is billed hourly on a sliding scale by combined household income — see the <a href="{root}pricing/">pricing page</a> before you book.</p>
+</div></section>
+
+{cta_band(root,"teal","Ready to settle instead of fight?","Book directly with our mediation team — English or Spanish.","Book a mediation session","#book")}
 """
 page("ways-we-help/mediators/index.html",
      "Mediators — Certified, Bilingual Divorce Mediation | Family Matters Law Group",
@@ -419,7 +508,7 @@ body = f"""
       <div class="card"><span class="sw" style="background:var(--teal)"></span><h3>Document templates</h3><p>Attorney-built forms — a couple free, the rest available to purchase one at a time.</p></div>
       <div class="card"><span class="sw" style="background:var(--pink)"></span><h3>Attorney coaching</h3><p>One-on-one strategy with a licensed attorney — per task or on retainer.</p></div>
     </div>
-    <div class="mt-m"><a href="{CTA['coaches']}" class="btn btn-solid" style="background:var(--orange);box-shadow:0 12px 28px rgba(251,92,14,.34);">Browse the shop</a></div>
+    <div class="mt-m"><a href="{root}shop/" class="btn btn-solid" style="background:var(--orange);box-shadow:0 12px 28px rgba(251,92,14,.34);">Browse the shop</a></div>
   </div>
 </section>
 
@@ -430,7 +519,43 @@ page("ways-we-help/diy-legal-coaches/index.html",
      "Represent yourself in your Florida family case with a licensed attorney coaching you: flat-fee tasks and retainer-based coaching.",
      body, active="ways")
 
+# --- DIY Legal Shop ----------------------------------------------------------
+root = "../"  # shop/ lives at depth 1
+SOON = ('<span style="display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;'
+        'background:var(--chartreuse);color:var(--ink);font:700 .68rem/1.5 var(--font-display);'
+        'letter-spacing:.06em;text-transform:uppercase;vertical-align:middle;">Coming soon</span>')
+body = f"""
+{page_hero("DIY Legal Shop", "Attorney-built tools to run your own case",
+  "A growing shop of document templates, toolkits, and on-demand courses — written and vetted by our own attorneys, not scraped from a generic form site. We're building these ourselves, so they land the way we'd file them.",
+  root, [("Ways we help","ways-we-help/diy-legal-coaches/"),("DIY Legal Shop","")], tint="tint-coaches")}
+{feature(root, photo("page-diy-divorce.jpg", default=""))}
+<section class="section paper"><div class="wrap">
+  <div class="kicker">What's coming</div>
+  <h2 class="h2" style="margin-bottom:20px;">Built in-house, released as they're ready</h2>
+  <div class="cards">
+    <div class="card"><span class="sw" style="background:var(--teal)"></span><h3>Document templates {SOON}</h3><p>Attorney-built Florida forms — parenting plans, MSAs, financial affidavits and more. A couple free, the rest priced one at a time. We're drafting and testing every one before it goes up.</p></div>
+    <div class="card"><span class="sw" style="background:var(--orange)"></span><h3>On-demand courses {SOON}</h3><p>Self-paced walkthroughs of Florida divorce, custody, and discovery — so you understand each step before you take it.</p></div>
+    <div class="card"><span class="sw" style="background:var(--pink)"></span><h3>Toolkits &amp; guides {SOON}</h3><p>Checklists and plain-English guides that pair with the templates and keep you from missing a filing or a disclosure.</p></div>
+  </div>
+</div></section>
+<section class="section dim"><div class="wrap measure prose">
+  <div class="kicker">Available now</div>
+  <h2>Attorney coaching, today</h2>
+  <p>The templates aren't live yet — but the person behind them is. Until the shop opens, the fastest way to get your documents right is <a href="{root}ways-we-help/diy-legal-coaches/">DIY Legal Coaching</a>: a licensed attorney drafts and reviews the paperwork that matters, per task or on a retainer. When the templates launch, coaching clients get first access.</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;">
+    <a href="{CTA['coaches']}" class="btn btn-solid" style="background:var(--orange);box-shadow:0 12px 28px rgba(251,92,14,.34);">Start with coaching</a>
+    <a href="{root}pricing/" class="btn btn-outline">See pricing</a>
+  </div>
+</div></section>
+{cta_band(root,"orange","Want first access when the shop opens?","Start with a coaching consult now — clients are first in line for the templates.","Start coaching",CTA["coaches"])}
+"""
+page("shop/index.html",
+     "DIY Legal Shop — Attorney-Built Templates & Toolkits (Coming Soon) | Family Matters Law Group",
+     "A growing shop of attorney-built Florida family-law templates, toolkits, and courses. Templates coming soon; attorney coaching available now.",
+     body, active="ways")
+
 # --- Guardians ad Litem ------------------------------------------------------
+root = "../../"  # back to depth-2 pages
 body = f"""
 {page_hero("Guardians ad Litem · A voice for the kids", "An independent voice for the children in the case",
   "A Guardian ad Litem is a court-appointed advocate focused on the children's best interests when parents can't find common ground. We serve as GAL with a rare thing on a firm website: an honest account of what the role can — and can't — do for your family.",
@@ -1164,7 +1289,7 @@ body = f"""
   <div class="prose">
     <p>Nazarena Hauser has led the firm's litigation since 2017. Her community standing is real and verifiable: <strong>past President of the Broward County Hispanic Bar Association (2022–23)</strong>, Chair of its Hispanic Lawyers Committee, a <strong>2023 CAHM Culture Award</strong>, and Broward Bar's <strong>40 Under 40 (2021)</strong>.</p>
     <p>She offers her services in <strong>English and in Spanish</strong> — fully bilingual, including mediation conducted entirely in Spanish. When a family's biggest decisions are being negotiated, no one at her table has to do it in their second language.</p>
-    <p>Beyond litigation and mediation, Nazarena serves as a <strong>Guardian ad Litem</strong>, advocating for the best interests of children in high-conflict cases — and she mentors and coaches other family-law attorneys through <strong>Legal Authority Lab</strong>.</p>
+    <p>Beyond litigation and mediation, Nazarena serves as a <strong>Guardian ad Litem</strong>, advocating for the best interests of children in high-conflict cases — and she mentors and coaches other family-law attorneys through <a href="https://legalauthoritylab.com/coaching"><strong>Legal Authority Lab</strong></a>.</p>
     <h2>Focus</h2>
     <ul class="lead-list">
       <li>Contested divorce and custody litigation</li>
@@ -1251,13 +1376,16 @@ page("current-clients/index.html", "Current Clients | Family Matters Law Group",
 # --- Get started (routing) ---------------------------------------------------
 body = f"""
 {page_hero("Get started", "Not sure where to begin? Start here.",
-  "Four ways in, one honest starting point. Tell us what's going on and we'll route you to the service that actually fits — each links straight to its own intake, no generic contact form.",
+  "Four ways in, one honest starting point. Take the 30-second path finder below, or pick your route yourself — each links straight to its own intake, no generic contact form.",
   root, [("Get started","get-started/")], tint="tint-lawyers")}
 {feature(root, photo("page-get-started.jpg", default=""))}
-<section class="section paper"><div class="wrap">
+{path_finder(root)}
+<section class="section paper" id="routes"><div class="wrap">
+  <h2 class="h2 center" style="margin-bottom:8px;">Or choose your route</h2>
+  <p class="measure center" style="margin:0 auto 26px;color:var(--muted);">Already know what you need? Go straight to it.</p>
   <div class="cards">
     <a class="card" href="{CTA['lawyers']}"><span class="sw" style="background:var(--pink)"></span><h3>I want a lawyer to handle it</h3><p>Full or flat-fee representation for divorce, custody, support, and more.</p><p class="go">Start intake →</p></a>
-    <a class="card" href="{CTA['mediators']}"><span class="sw" style="background:var(--teal)"></span><h3>I want to settle, not fight</h3><p>Certified mediation, English or Spanish, with or without lawyers.</p><p class="go">Book mediation →</p></a>
+    <a class="card" href="{root}ways-we-help/mediators/#book"><span class="sw" style="background:var(--teal)"></span><h3>I want to settle, not fight</h3><p>Certified mediation, English or Spanish, with or without lawyers.</p><p class="go">Book mediation →</p></a>
     <a class="card" href="{CTA['coaches']}"><span class="sw" style="background:var(--orange)"></span><h3>I'll do it myself, with help</h3><p>Attorney coaching and paralegal drafting behind your own case.</p><p class="go">Start coaching →</p></a>
     <a class="card" href="{CTA['gal']}"><span class="sw" style="background:var(--chartreuse)"></span><h3>The case needs a voice for the kids</h3><p>Request a Guardian ad Litem for a child in a case.</p><p class="go">Request a GAL →</p></a>
   </div>
@@ -1278,7 +1406,7 @@ body = f"""
   <div class="cards">
     <a class="card" href="{root}blog/"><span class="sw" style="background:var(--pink)"></span><h3>Blog &amp; Guides</h3><p>In-depth, current guides on alimony, child support, custody, and more.</p><p class="go">Read the blog →</p></a>
     <a class="card" href="{root}glossary/"><span class="sw" style="background:var(--teal)"></span><h3>Legal Glossary</h3><p>Short, interlinked definitions — UCCJEA, best interest, equitable distribution, and more.</p><p class="go">Open the glossary →</p></a>
-    <a class="card" href="{CTA['coaches']}"><span class="sw" style="background:var(--orange)"></span><h3>DIY Legal Shop</h3><p>Courses, templates, and toolkits to run your own case with confidence.</p><p class="go">Browse the shop →</p></a>
+    <a class="card" href="{root}shop/"><span class="sw" style="background:var(--orange)"></span><h3>DIY Legal Shop</h3><p>Courses, templates, and toolkits to run your own case with confidence.</p><p class="go">Browse the shop →</p></a>
   </div>
 </div></section>
 """
@@ -1555,7 +1683,7 @@ home_body = f"""
     <div class="shop-list"><span class="shop-tag">Courses</span><span class="shop-tag">Document templates</span><span class="shop-tag">Toolkits &amp; guides</span><span class="shop-tag">Attorney coaching</span></div></div>
   <div class="shop-cta"><div class="shop-mug" role="img" aria-label="DIY Legal Coaching"><span><span class="m1">DIY Legal</span><span class="m2">Coaching</span></span></div></div>
 </div><div class="wrap" style="margin-top:34px;position:relative;z-index:2;">
-  <a href="{root}ways-we-help/diy-legal-coaches/" class="btn btn-solid" style="background:var(--orange);box-shadow:0 12px 28px rgba(251,92,14,.34);">Browse the shop</a>
+  <a href="{root}shop/" class="btn btn-solid" style="background:var(--orange);box-shadow:0 12px 28px rgba(251,92,14,.34);">Browse the shop</a>
 </div></section>
 
 <section class="team" id="team"><div class="wrap">

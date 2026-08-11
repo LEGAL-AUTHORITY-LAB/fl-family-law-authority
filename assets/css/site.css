@@ -411,6 +411,8 @@ header.site.scrolled .menu-btn{color:var(--ink);}
 .prose li{margin-bottom:.5em;}
 .prose li::marker{color:var(--pink);}
 .prose a{color:var(--teal);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;}
+.prose a.btn{text-decoration:none;color:#fff;}
+.prose a.btn-outline{color:var(--ink);}
 .prose strong{color:var(--ink);font-weight:700;}
 .prose blockquote{border-left:3px solid var(--pink);padding-left:20px;margin-left:0;font-style:italic;color:var(--ink);}
 
@@ -465,6 +467,23 @@ header.site.scrolled .menu-btn{color:var(--ink);}
 .faq details[open] summary::after{transform:rotate(225deg);}
 .faq details p{padding:0 0 22px;font-size:15.5px;line-height:1.65;color:var(--ink-soft);margin:0;}
 .faq details p + p{padding-top:0;margin-top:-8px;}
+
+/* ---------- Path finder (Get Started quiz) ---------- */
+.pathfinder{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  padding:34px 30px;box-shadow:0 18px 44px rgba(20,20,30,.06);}
+.pf-qh{font-size:20px;margin:0 0 18px;text-align:center;}
+.pf-opts{display:grid;gap:12px;}
+.pf-opt{display:block;width:100%;text-align:left;cursor:pointer;font:inherit;
+  background:var(--paper-2,#f6f6f4);border:1px solid var(--line);border-radius:14px;
+  padding:16px 18px;font-size:16px;line-height:1.4;color:var(--ink);transition:.15s;}
+.pf-opt:hover,.pf-opt:focus-visible{border-color:var(--ink);background:#fff;transform:translateY(-1px);
+  box-shadow:0 8px 20px rgba(20,20,30,.08);outline:none;}
+.pf-result{background:var(--paper-2,#f6f6f4);border-radius:14px;padding:26px 24px;}
+.pf-rh{font-size:23px;margin:6px 0 10px;}
+.pf-rp{color:var(--ink-soft);font-size:16px;line-height:1.6;margin:0 0 20px;}
+.pf-ract{display:flex;gap:12px;flex-wrap:wrap;}
+.pf-foot{margin-top:16px;text-align:center;}
+@media(max-width:560px){.pf-ract .btn{width:100%;}}
 
 /* ---------- CTA band ---------- */
 .cta-band{background:var(--ink);color:var(--paper);border-radius:var(--radius);padding:44px 40px;

@@ -80,15 +80,82 @@
     <div class="breadcrumb"><a href="../">Home</a> <span>/</span> Get started</div>
     <span class="eyebrow">Get started</span>
     <h1>Not sure where to begin? Start here.</h1>
-    <p class="lede">Four ways in, one honest starting point. Tell us what's going on and we'll route you to the service that actually fits — each links straight to its own intake, no generic contact form.</p>
+    <p class="lede">Four ways in, one honest starting point. Take the 30-second path finder below, or pick your route yourself — each links straight to its own intake, no generic contact form.</p>
     
   </div>
 </section>
 <section class="section paper" style="padding-top:0;padding-bottom:0"><div class="wrap"><img src="../assets/images/page-get-started.jpg" alt="Family Matters Law Group" style="width:100%;max-height:540px;object-fit:cover;object-position:center 22%;border-radius:var(--radius);display:block"></div></section>
-<section class="section paper"><div class="wrap">
+
+<section class="section paper"><div class="wrap measure">
+  <div class="pathfinder" id="pathfinder" data-routes='{"lawyers": "https://www.familymatterslawgroup.com/legal-representation", "mediators": "../ways-we-help/mediators/#book", "coaches": "https://www.familymatterslawgroup.com/diy-legal-individualized-coaching", "gal": "https://www.familymatterslawgroup.com/guardian-ad-litem", "consult": "https://www.familymatterslawgroup.com/get-started"}'>
+    <div class="kicker center">30-second path finder</div>
+    <h2 class="h2 center" style="margin-bottom:6px;">Find the right starting point</h2>
+    <p class="center" style="color:var(--muted);margin:0 auto 22px;">Two quick questions. No email required.</p>
+    <div class="pf-stage" aria-live="polite"><p class="center" style="color:var(--muted);margin:0;">Loading the finder&hellip; if it doesn&rsquo;t appear, <a href="#routes">choose your route below</a>.</p></div>
+    <div class="pf-foot"><button type="button" class="pf-back btn btn-outline" hidden>&larr; Back</button></div>
+  </div>
+</div></section>
+<script>
+(function(){
+  var pf=document.getElementById('pathfinder'); if(!pf) return;
+  var ROUTES=JSON.parse(pf.getAttribute('data-routes'));
+  var Q=[
+    {id:'q1', q:"What's going on?", a:[
+      {t:"Divorce or separation", next:'q2'},
+      {t:"Custody, time-sharing, or child support", next:'q2'},
+      {t:"A child in a case needs an independent advocate", result:'gal'},
+      {t:"I know my issue — I just want help doing it myself", result:'coaches'}
+    ]},
+    {id:'q2', q:"How much do you and the other side agree?", a:[
+      {t:"We mostly agree — I want it settled and enforceable", result:'mediators'},
+      {t:"We disagree on a lot, or there's real conflict", result:'lawyers'},
+      {t:"I'd rather not hire a lawyer — just coach me through it", result:'coaches'}
+    ]}
+  ];
+  var R={
+    lawyers:{c:'var(--pink)', h:'A lawyer to handle it', p:"When there's real conflict, you want an advocate driving the case — full or flat-fee representation for divorce, custody, and support.", cta:'Start intake', key:'lawyers'},
+    mediators:{c:'var(--teal)', h:'Mediation', p:"You're close enough to agree. A certified, bilingual mediator gets you a settlement that holds up in court — faster and cheaper than a fight.", cta:'Book mediation', key:'mediators'},
+    coaches:{c:'var(--orange)', h:'Do it yourself, with an attorney behind you', p:"Run your own case with a licensed attorney drafting, reviewing, and prepping you — per task or on a retainer.", cta:'Start coaching', key:'coaches'},
+    gal:{c:'var(--chartreuse)', h:'A voice for the kids', p:"Request a Guardian ad Litem — a court-appointed advocate focused on the children's best interests.", cta:'Request a GAL', key:'gal'}
+  };
+  var stage=pf.querySelector('.pf-stage'), back=pf.querySelector('.pf-back'), hist=[];
+  function renderQ(id){
+    var q=Q.filter(function(x){return x.id===id;})[0];
+    var h='<div class="pf-q"><h3 class="pf-qh">'+q.q+'</h3><div class="pf-opts">';
+    q.a.forEach(function(o,i){ h+='<button type="button" class="pf-opt" data-i="'+i+'">'+o.t+'</button>'; });
+    h+='</div></div>'; stage.innerHTML=h;
+    stage.querySelectorAll('.pf-opt').forEach(function(b){
+      b.addEventListener('click',function(){
+        var o=q.a[+b.getAttribute('data-i')];
+        hist.push(id); back.hidden=false;
+        if(o.result){ renderR(o.result); } else { renderQ(o.next); }
+      });
+    });
+  }
+  function renderR(key){
+    var r=R[key];
+    stage.innerHTML='<div class="pf-result" style="border-top:4px solid '+r.c+';">'+
+      '<div class="kicker" style="color:'+r.c+';">Your starting point</div>'+
+      '<h3 class="pf-rh">'+r.h+'</h3><p class="pf-rp">'+r.p+'</p>'+
+      '<div class="pf-ract"><a class="btn btn-solid" href="'+ROUTES[r.key]+'">'+r.cta+'</a>'+
+      '<a class="btn btn-outline" href="'+ROUTES.consult+'">Not sure? Book a $250 consult</a></div></div>';
+    back.hidden=false;
+  }
+  back.addEventListener('click',function(){
+    var prev=hist.pop(); if(prev===undefined){ return; }
+    if(hist.length===0){ back.hidden=true; }
+    renderQ(prev);
+  });
+  renderQ('q1');
+})();
+</script>
+
+<section class="section paper" id="routes"><div class="wrap">
+  <h2 class="h2 center" style="margin-bottom:8px;">Or choose your route</h2>
+  <p class="measure center" style="margin:0 auto 26px;color:var(--muted);">Already know what you need? Go straight to it.</p>
   <div class="cards">
     <a class="card" href="https://www.familymatterslawgroup.com/legal-representation"><span class="sw" style="background:var(--pink)"></span><h3>I want a lawyer to handle it</h3><p>Full or flat-fee representation for divorce, custody, support, and more.</p><p class="go">Start intake →</p></a>
-    <a class="card" href="https://www.familymatterslawgroup.com/mediation"><span class="sw" style="background:var(--teal)"></span><h3>I want to settle, not fight</h3><p>Certified mediation, English or Spanish, with or without lawyers.</p><p class="go">Book mediation →</p></a>
+    <a class="card" href="../ways-we-help/mediators/#book"><span class="sw" style="background:var(--teal)"></span><h3>I want to settle, not fight</h3><p>Certified mediation, English or Spanish, with or without lawyers.</p><p class="go">Book mediation →</p></a>
     <a class="card" href="https://www.familymatterslawgroup.com/diy-legal-individualized-coaching"><span class="sw" style="background:var(--orange)"></span><h3>I'll do it myself, with help</h3><p>Attorney coaching and paralegal drafting behind your own case.</p><p class="go">Start coaching →</p></a>
     <a class="card" href="https://www.familymatterslawgroup.com/guardian-ad-litem"><span class="sw" style="background:var(--chartreuse)"></span><h3>The case needs a voice for the kids</h3><p>Request a Guardian ad Litem for a child in a case.</p><p class="go">Request a GAL →</p></a>
   </div>
@@ -118,10 +185,10 @@
     </div>
     <div>
       <h4>Learn</h4>
-      <a href="../topics/divorce/">Divorce</a>
-      <a href="../topics/custody-and-parenting/">Custody &amp; Parenting</a>
+      <a href="../learn/">Learn hub</a>
       <a href="../blog/">Blog &amp; Guides</a>
       <a href="../glossary/">Legal Glossary</a>
+      <a href="../shop/">DIY Legal Shop</a>
     </div>
     <div>
       <h4>Firm</h4>
