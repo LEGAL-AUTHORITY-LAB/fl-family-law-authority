@@ -36,10 +36,14 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Transcript doc-link + Claude Cowork button | (a) "paste doc link" (SharePoint URL) transcript source; (b) per-matter/per-staff Claude button (`matter_claude_projects`): Set up → matter instruction block w/ SharePoint link → paste Cowork URL → Open in Claude. Tolson verified |
 
+| Skill Launcher | `skill-registry.ts` (13 skills, 3 categories); per-matter "Launch a skill" dropdown, matter-type recommend; builds Cowork handoff prompt (shared `matter-instructions.ts`) + inputs (OP disco link etc.) → Copy prompt & open Claude; logs launch. No Gemini/GPT. Subsumes Draft (#18) + Advanced Discovery (#20). Tolson verified |
+
 ## 🔨 In progress — AI migration (ethics pivot)
-- **Skill Launcher (#30)** — per-matter dropdown of matter-appropriate FMLG skills → builds a Cowork handoff prompt (copy + Open in Claude); no Gemini/GPT. Subsumes Draft button (#18) + Advanced Discovery (#20).
-- **Migrate memo/case-info/deadline off Gemini (#31)** — re-route generation to Cowork handoff; keep in-app render/sign-off/save.
-- **OCR decision (#32)** — move scanned-doc OCR off Gemini vision (recommend no-AI server OCR).
+- **OCR hybrid (#32)** — replace Gemini vision-OCR with tesseract server OCR + Cowork fallback (native text for digital files).
+- **Migrate memo/case-info/deadline off Gemini (#31)** — memo generation → Cowork handoff + paste-back into existing render/sign-off/save; case-info + deadline-derive → Cowork handoff, disable silent Gemini calls.
+
+## 🔨 Planned — Leads module (new)
+- **Leads section (#33)** — website lead form → lands in app → notify intake staff → manual conflict check / contact / decide (free consult / paid consult / reject) via check-off buttons → on consult scheduled, create a SharePoint lead file (Zapier) → notes/transcript → memo (reuse Transcript→Memo). Manual scheduling + payment link, just check-off toggles. Ingestion mechanism + leads SharePoint location TBD.
 
 ## ⏳ Backlog (prioritized)
 1. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
