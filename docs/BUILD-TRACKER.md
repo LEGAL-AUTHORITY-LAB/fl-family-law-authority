@@ -45,8 +45,11 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Sync to SharePoint (tracker) | Two-stage: Stage 1 deterministic parse of an existing tracker spreadsheet (SheetJS → `discovery_items`, conflict-flagged) or "Reconcile in Claude" for unstructured docs; Stage 2 optional full recursive folder scan + merge; change summary + audit. No AI. Tolson verified |
 
-## ⏳ Backlog (prioritized)
-1. **Close File (#14)** — now Cowork-native: `fmlg-case-closing` launcher skill + "Finalize Closing" = move matter folder OPEN → CLOSED FILES via Zapier (`d=wbce00ba3758d407e82d3642bfb60f5ec`). Skill re-upload no longer needed (runs in Cowork).
+| Close File | `fmlg-case-closing` skill; Close File card (attorney-auth confirm) → `matter_close_webhook_url` OPEN→CLOSED move + `closed_*` columns + Reopen; Clients Active/Closed/All filter; Dashboard excludes closed; Closed banner. Verified |
+
+## 🔨 In progress — Discovery intake rework
+- **Request Discovery SharePoint-native (#34)** — surface Request Discovery; ensure/create `SHARED - DISCO FROM CLIENT` per matter; portal upload → push to that folder (Zapier); staff review/approve each file → move approved to `CLIENT REVIEWED DISCO` (Zapier).
+- **MD tracker re-request + multi-instance (#35)** — per-item "Re-request" for outstanding items (client notify + logged); multi-instance items (e.g. last 3 yrs tax returns → per-year check-offs) rolling up to complete.
 3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
 4. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
 5. **Templates merge repoint** — Templates page merge dropdown still queries legacy `cases`; repoint to `matters`.
