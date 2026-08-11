@@ -59,8 +59,17 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Client PWA + notifications | Installable PWA (manifest + `push-sw.js`); `notifyClient` dispatcher fans to in-app (portal bell) / email (Outlook) / web push (VAPID) / SMS (`sms_webhook_url`); `client_notification_prefs` + `push_subscriptions`; triggers on chat/doc/e-sign/form/discovery/task. Verified |
 
+| Client portal polish + invite | Unified nav (Home · Messages · Documents · Documents to Provide · Forms · Dates · Settings; mobile bottom tabs); plain-language labels + empty states; staff "Invite to portal" (`inviteClientToPortal` → Supabase invite + client role + `portal_user_id` + Outlook email/copy link). Verified phone-width |
+
 ## 🔨 In progress
 - (none — task backlog clear)
+
+## ⏳ Remaining build (beyond Zapier config)
+- **E-sign return path** — provider callback → mark signed + write signed PDF back to SharePoint (currently manual status).
+- **Intake form → SharePoint save** — submitted native form → PDF → matter Intake folder (needs a Zapier hook too).
+- **Slack inbound** — staff Slack replies → portal thread (custom Slack app + `SLACK_SIGNING_SECRET` + Events URL).
+- **Templates merge repoint** — Templates dropdown still queries legacy `cases`; point at `matters`.
+- **Real branded PWA icons** (placeholders now); attorney review of client-facing guide text.
 3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
 4. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
 5. **Templates merge repoint** — Templates page merge dropdown still queries legacy `cases`; repoint to `matters`.
