@@ -55,8 +55,9 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Client on-screen guides | 3 branded guides (Welcome / Mandatory Disclosure w/ full 12.285 collapsible / Financial Affidavit — native-form, no FL Software) in editable `portal-guides.ts`; dismissible+re-openable; surfaced on portal home, Discovery tab, FA form. Verified |
 
+| Client To-Do list | `client_tasks` + `reconcile_client_tasks` RPC (derived from forms/discovery-rollup/doc-review/e-sign/evidence/manual; auto-done/reopen); portal "What we need from you" + To-Do tab (deep links); staff panel (add/evidence). Tolson verified |
+
 ## 🔨 In progress — client-experience
-- **Client To-Do list (#38)** — auto-populates from staff requests (intake/disco/evidence/review/sign).
 - **Client PWA + notifications (#37)** — installable PWA; in-app/email/push/SMS message alerts.
 3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
 4. **Slack inbound** — Slack replies → portal. Dep: custom Slack app + `SLACK_SIGNING_SECRET` + Events URL `…/api/public/slack/events`.
