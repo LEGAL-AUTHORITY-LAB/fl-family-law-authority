@@ -51,8 +51,9 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | MD tracker: re-request + multi-instance | `discovery_item_instances` + `ensure_discovery_instances` RPC (tax/paystub/bank seed 3); per-instance check-offs roll up to category ("1/3"); per-item "Re-request" + "Request all outstanding" (logged, client "Requested" badge). Tolson verified |
 
-## 🔨 In progress — staff reliability + client-experience
-- **Staff "Action needed" prompts (#39)** — `staff_action_items`; every manual fallback (folder create/share/move, matter folder on convert, memo/lead saves, close move) registers a tracked prompt w/ instructions; "Needs your action" card per matter + firm-wide; Mark done.
+| Staff "Action needed" prompts | `staff_action_items` + `register_action_item` RPC (dedup); every manual fallback registers a tracked prompt (disco folder create+share, reviewed move, lead/matter folder, close move, memo saves); amber card per matter/lead + Dashboard widget; Mark done attributed+logged. Verified |
+
+## 🔨 In progress — client-experience
 - **Client guides (#36)** — on-screen portal-invite + MD + FA guides with the request (FA guide = native form, FL Software dropped).
 - **Client PWA + notifications (#37)** — installable PWA; in-app/email/push/SMS message alerts.
 - **Client To-Do list (#38)** — auto-populates from staff requests (intake/disco/evidence/review/sign).
