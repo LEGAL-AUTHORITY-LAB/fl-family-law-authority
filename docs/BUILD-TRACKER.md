@@ -28,15 +28,15 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 | Intake send/track | Staff recommend/send/track; reset stale auto-assignments to draft; client Forms area (sent→viewed→completed) |
 | Cases cleanup + Dashboard | Legacy DISCO Cases page removed (routes + 16 orphaned components); clients sorted by last name; Dashboard rebuilt on real schema (stats, upcoming deadlines, discovery queue, activity feed) |
 | Staff-name attribution | `profiles.display_name` + resolution (display_name→full_name→email); real staff names on activity feed, chat (staff side), doc share, discovery accept, forms actions, dashboard; editable in Settings; client chat keeps "Your legal team" alias |
+| Chat tab + Portal Messages inbox | Chat is its own tab on command center (deep-link `?tab=chat`); top-level `/messages` inbox aggregates all client threads (unread-first, snippet, relative time); `portal_thread_reads` per-staff unread; same `portal_messages` data |
+| Client doc delivery + review/comments | Staff "Deliver for review" (attorney sign-off) → client "For your review" section; `document_comments` thread both sides w/ real names; status badge Delivered→Viewed→Commented→Approved; audit columns on `documents` |
 
 ## 🔨 In progress
-- **Chat as its own tab + Portal Messages inbox** — per-matter Chat tab on command center; top-level Messages page aggregating all client threads (unread-first, deep-link to thread). Same underlying thread data.
+- **Readable MD/discovery tracker** — group by 12.285 category, produced/outstanding, files collapsed, unmatched in "Needs review" (replace flat file dump).
 
 ## ⏳ Backlog (prioritized)
-1. **Client document delivery + review/comments** — portal shows docs shared w/ client (+ shared-on date); staff "Deliver for review" a specific doc; per-doc client comment thread; status delivered→viewed→commented. Attorney sign-off gates.
-2. **Send for e-signature** — "Send for signature" → Zapier → PandaDoc or Adobe Acrobat Sign; track sent→viewed→signed; signed PDF back to matter SharePoint folder. Attorney sign-off gates. Dep: Zapier.
-3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
-4. **Readable MD/discovery tracker** — group by 12.285 category, produced/outstanding, files collapsed, unmatched in "Needs review" (replace flat file dump).
+1. **Send for e-signature** — "Send for signature" → Zapier Catch Hook → PandaDoc (`PandaDocCLIAPI`) or Adobe Acrobat Sign (`App210820CLIAPI`); track sent→viewed→signed; signed PDF back to matter SharePoint folder. Attorney sign-off gates. Dep: Zapier webhook URL (both providers confirmed available).
+2. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
 5. **Four staff buttons / Advanced Discovery page** — dedicated OP-side surface: paste OP discovery SharePoint link → OP discovery-gap (`fmlg-discovery-gap`), income assessment (`fmlg-income-assessor` + `fmlg-fa-crosscheck`), CS/alimony/ED (`fmlg-cs-worksheet`/`fmlg-alimony-assessor`/`fmlg-ed-chart`), advanced-discovery drafting (`fmlg-advanced-discovery` + templates). Also Disco Tracker / Cert of Compliance buttons. All drafts → attorney review.
 6. **Staff Draft button** — pick doc type (freeform or dropdown by case type) → AI draft from templates/skills → attorney review.
 7. **Transcript → Memo button** — drop transcript → `fmlg-case-memo` → memo saved to matter NOTES folder. Dep: Zapier SharePoint write.
