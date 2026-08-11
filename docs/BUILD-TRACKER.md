@@ -68,8 +68,9 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Intake form → SharePoint | On submit → branded PDF (all answers) → `form_sharepoint_webhook_url` folder "Intake"; `form_responses.pdf_url`/`saved_to_sharepoint`; staff download + "Re-generate & save"; Action-needed fallback. Verified |
 
+| Slack inbound (two-way done) | `POST /api/public/slack/events`: HMAC verify + challenge; channel→matter map; dedupe on `slack_ts` (unique idx, also loop guard); staff replies → portal thread + inbox, attributed; client notify. Needs `SLACK_SIGNING_SECRET` + Slack app config. Verified |
+
 ## ⏳ Remaining build (beyond Zapier config)
-- **Slack inbound** — staff Slack replies → portal thread (custom Slack app + `SLACK_SIGNING_SECRET` + Events URL).
 - **Templates merge repoint** — Templates dropdown still queries legacy `cases`; point at `matters`.
 - **Real branded PWA icons** (placeholders now); attorney review of client-facing guide text.
 3. **Intake → SharePoint save** — on submit, render completed form to PDF and upload to the matter `Intake` folder. Dep: Zapier SharePoint write.
