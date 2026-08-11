@@ -49,8 +49,10 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 
 | Request Discovery (SharePoint-native) | Prominent Request Discovery; `disco_folder_webhook_url` creates `SHARED - DISCO FROM CLIENT` (stored `matters.disco_from_client_url`); portal upload → push (`disco_upload_webhook_url`); staff Approve→move to `CLIENT REVIEWED DISCO` (`disco_reviewed_webhook_url`) / Reject→needed; `discovery_item_files.review_status`; Discovery settings section. Tolson verified |
 
-## 🔨 In progress — discovery + client-experience
-- **MD tracker re-request + multi-instance (#35)** — per-item "Re-request" for outstanding items (client notify + logged); multi-instance items (e.g. last 3 yrs tax returns → per-year check-offs) rolling up to complete.
+| MD tracker: re-request + multi-instance | `discovery_item_instances` + `ensure_discovery_instances` RPC (tax/paystub/bank seed 3); per-instance check-offs roll up to category ("1/3"); per-item "Re-request" + "Request all outstanding" (logged, client "Requested" badge). Tolson verified |
+
+## 🔨 In progress — staff reliability + client-experience
+- **Staff "Action needed" prompts (#39)** — `staff_action_items`; every manual fallback (folder create/share/move, matter folder on convert, memo/lead saves, close move) registers a tracked prompt w/ instructions; "Needs your action" card per matter + firm-wide; Mark done.
 - **Client guides (#36)** — on-screen portal-invite + MD + FA guides with the request (FA guide = native form, FL Software dropped).
 - **Client PWA + notifications (#37)** — installable PWA; in-app/email/push/SMS message alerts.
 - **Client To-Do list (#38)** — auto-populates from staff requests (intake/disco/evidence/review/sign).
@@ -82,6 +84,8 @@ Legend: ✅ done & tested · 🔨 in progress · ⏳ backlog · ⛔ blocked
 - Approval legal weight (informal vs SignNow/Adobe) · chat transcript export to Correspondence/ · four-button runtime (native prompts vs true skill calls).
 
 ## Non-negotiables
+- **No client data to non-Claude models** — all AI/skills run in the firm's Claude Cowork (handoff); app never calls Gemini/GPT over client data.
+- **Surface manual steps** — when the app can't automate a SharePoint step (webhook unset, folder needs sharing/creating/moving), TELL staff via a tracked "Action needed" prompt; never silently skip.
 - SharePoint = source of truth for hired-matter docs. Petitioner/Respondent terminology client-facing. Nothing shows "filed" unless in a filed folder / file-stamped. Attorney sign-off before anything drafted is sent or filed. Portal ≠ substitute for attorney-client relationship or Slack internal comms.
 
 ## Key IDs
