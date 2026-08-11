@@ -190,7 +190,7 @@ def footer(root):
 </footer>"""
 
 
-def page(relpath, title, desc, body, active="", is_home=False):
+def page(relpath, title, desc, body, active="", is_home=False, head_extra="", body_extra=""):
     root = root_for(relpath)
     cls = ' class="home"' if is_home else ""
     doc = f"""<!DOCTYPE html>
@@ -204,7 +204,7 @@ def page(relpath, title, desc, body, active="", is_home=False):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/css/site.css">
-</head>
+{head_extra}</head>
 <body{cls}>
 {header(root, active)}
 <main>
@@ -212,7 +212,7 @@ def page(relpath, title, desc, body, active="", is_home=False):
 </main>
 {footer(root)}
 <script src="{root}assets/js/site.js"></script>
-</body>
+{body_extra}</body>
 </html>"""
     add(relpath, doc)
 
@@ -253,11 +253,11 @@ def path_finder(root):
     """Interactive 'which service fits you' router for the Get Started page."""
     import json
     routes = {
-        "lawyers":   CTA["lawyers"],
+        "lawyers":   root + "forms/get-started/",
         "mediators": root + "ways-we-help/mediators/#book",
-        "coaches":   CTA["coaches"],
-        "gal":       CTA["gal"],
-        "consult":   CTA["get_started"],
+        "coaches":   root + "forms/coaching/",
+        "gal":       root + "forms/guardian-ad-litem/",
+        "consult":   root + "forms/free-consult/",
     }
     tpl = r"""
 <section class="section paper"><div class="wrap measure">
@@ -1384,12 +1384,25 @@ body = f"""
   <h2 class="h2 center" style="margin-bottom:8px;">Or choose your route</h2>
   <p class="measure center" style="margin:0 auto 26px;color:var(--muted);">Already know what you need? Go straight to it.</p>
   <div class="cards">
-    <a class="card" href="{CTA['lawyers']}"><span class="sw" style="background:var(--pink)"></span><h3>I want a lawyer to handle it</h3><p>Full or flat-fee representation for divorce, custody, support, and more.</p><p class="go">Start intake →</p></a>
+    <a class="card" href="{root}forms/get-started/"><span class="sw" style="background:var(--pink)"></span><h3>I want a lawyer to handle it</h3><p>Full or flat-fee representation for divorce, custody, support, and more.</p><p class="go">Start intake →</p></a>
     <a class="card" href="{root}ways-we-help/mediators/#book"><span class="sw" style="background:var(--teal)"></span><h3>I want to settle, not fight</h3><p>Certified mediation, English or Spanish, with or without lawyers.</p><p class="go">Book mediation →</p></a>
-    <a class="card" href="{CTA['coaches']}"><span class="sw" style="background:var(--orange)"></span><h3>I'll do it myself, with help</h3><p>Attorney coaching and paralegal drafting behind your own case.</p><p class="go">Start coaching →</p></a>
-    <a class="card" href="{CTA['gal']}"><span class="sw" style="background:var(--chartreuse)"></span><h3>The case needs a voice for the kids</h3><p>Request a Guardian ad Litem for a child in a case.</p><p class="go">Request a GAL →</p></a>
+    <a class="card" href="{root}forms/coaching/"><span class="sw" style="background:var(--orange)"></span><h3>I'll do it myself, with help</h3><p>Attorney coaching and paralegal drafting behind your own case.</p><p class="go">Start coaching →</p></a>
+    <a class="card" href="{root}forms/guardian-ad-litem/"><span class="sw" style="background:var(--chartreuse)"></span><h3>The case needs a voice for the kids</h3><p>Request a Guardian ad Litem for a child in a case.</p><p class="go">Request a GAL →</p></a>
   </div>
-  <div class="notice mt-l">Still not sure? A <strong>$250 consultation</strong> (credited toward retainers over $2,500) will sort it out. <a href="{root}pricing/">See pricing</a> or <a href="{CTA['get_started']}">book a consult</a>.</div>
+  <div class="notice mt-l">Still not sure? A <strong>$250 consultation</strong> (credited toward retainers over $2,500) will sort it out. <a href="{root}pricing/">See pricing</a> or <a href="{root}forms/get-started/">start with the Get Started form</a>.</div>
+</div></section>
+<section class="section dim"><div class="wrap measure">
+  <h2 class="h2 center" style="margin-bottom:8px;">Specific intake forms</h2>
+  <p class="center" style="margin:0 auto 22px;color:var(--muted);">Already know exactly what you need? Go straight to the right form.</p>
+  <div class="formlinks">
+    <a href="{root}forms/document-prep/">Document prep &amp; review</a>
+    <a href="{root}forms/form-package/">DIY form package</a>
+    <a href="{root}forms/mediation/">Mediation intake</a>
+    <a href="{root}forms/free-consult/">Book a free consultation</a>
+    <a href="{root}forms/files-review/">Submit files for review</a>
+    <a href="{root}forms/domestic-violence/">Domestic violence / injunction</a>
+    <a href="{root}forms/general/">General contact</a>
+  </div>
 </div></section>
 """
 page("get-started/index.html", "Get Started | Family Matters Law Group",
@@ -1712,6 +1725,638 @@ home_body = f"""
 page("index.html", "Family Matters Law Group — Florida Family Law, Mediation, DIY Coaching & Guardians ad Litem",
      "A South Florida family law firm with four ways in: lawyers, mediators, DIY legal coaches, and guardians ad litem. Warm, direct, flat-fee options. Bilingual — se habla español.",
      home_body, active="", is_home=True)
+
+# =============================================================================
+#  LEAD-CAPTURE FORMS  (spec: FMLG_Lead_Form_Rebuild_Spec_2026-08-11)
+#  Declarative schema -> generic renderer. Field lists, branching, and payload
+#  mapping come straight from the spec; nothing invented beyond it.
+# =============================================================================
+import json as _json
+
+FL_COUNTIES = ["Broward", "Miami-Dade", "Palm Beach", "Monroe", "Martin",
+               "Other Florida county"]
+REFERRAL = ["Website Form Inquiry", "Web", "Word of Mouth", "Google", "Facebook",
+            "Instagram", "Attorney", "Friend", "Seminar", "Radio Ad", "Billboard",
+            "Walk-in", "Other"]
+REFERRAL_COACHING = ["Website Form Inquiry", "Web", "YouTube", "Word of Mouth",
+                     "Google", "Facebook", "Instagram", "Attorney", "Friend", "Other"]
+REFERRAL_GAL = ["Attorney", "Court", "Word of Mouth", "Website Form Inquiry",
+                "Friend", "Other"]
+MATTER_DIY = ["Divorce", "Child Custody", "Child Support", "Paternity", "Adoption", "Other"]
+SERVICE = ["Divorce/Dissolution", "Child Custody & Timesharing", "Child Support",
+           "Paternity", "Modification (Custody/Support/Alimony)",
+           "Domestic Violence Injunction", "Guardian ad Litem", "Mediation",
+           "Name Change", "Adoption", "Relocation", "DIY Document Help / Coaching", "Other"]
+
+
+def _esc(s):
+    return html.escape(str(s), quote=True)
+
+
+def _fid(name):
+    return "f_" + re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def _options_html(options, es_map=None):
+    out = ['<option value="" data-es="Seleccione&hellip;">Select&hellip;</option>']
+    for o in options:
+        val = o[0] if isinstance(o, (list, tuple)) else o
+        lab = o[1] if isinstance(o, (list, tuple)) else o
+        esa = ""
+        if es_map and lab in es_map:
+            esa = ' data-es="%s"' % _esc(es_map[lab])
+        out.append('<option value="%s"%s>%s</option>' % (_esc(val), esa, html.escape(str(lab))))
+    return "".join(out)
+
+
+def render_field(f, bilingual):
+    name = f["name"]
+    ftype = f.get("type", "text")
+    if ftype == "hidden":
+        role = ' data-role="%s"' % f["role"] if f.get("role") else ""
+        fill = ' data-fill="%s"' % f["fill"] if f.get("fill") else ""
+        return '<input type="hidden" name="%s" value="%s"%s%s>' % (
+            name, _esc(f.get("value", "")), role, fill)
+
+    fid = _fid(name)
+    req = bool(f.get("required"))
+    reqmark = '<span class="fmlg-req" aria-hidden="true">*</span>' if req else ""
+    labtext = html.escape(f.get("label", ""))
+    if bilingual and f.get("es_label"):
+        labinner = '<span data-es="%s">%s</span>' % (_esc(f["es_label"]), labtext)
+    else:
+        labinner = labtext
+    help_html = ""
+    if f.get("help"):
+        es = ' data-es="%s"' % _esc(f["es_help"]) if bilingual and f.get("es_help") else ""
+        help_html = '<span class="fmlg-help"%s>%s</span>' % (es, html.escape(f["help"]))
+    error = '<div class="fmlg-error">This field is required.</div>' if req else ""
+
+    # wrapper
+    cls = "fmlg-field" + (" hidden" if f.get("hidden") else "")
+    wa = ['class="%s"' % cls]
+    if req:
+        wa.append('data-required="1"')
+    wa += ['data-name="%s"' % name, 'data-type="%s"' % ftype]
+    if f.get("showif"):
+        fld, vals = f["showif"]
+        wa.append("data-showif='%s'" % _json.dumps({"field": fld, "in": vals}))
+    wrap_open = "<div %s>" % " ".join(wa)
+
+    role = ' data-role="%s"' % f["role"] if f.get("role") else ""
+    reqa = ' required aria-required="true"' if req else ""
+
+    if ftype in ("text", "email", "tel", "date", "number"):
+        ph = _esc(f.get("placeholder", ""))
+        esph = ' data-es-ph="%s"' % _esc(f["es_ph"]) if bilingual and f.get("es_ph") else ""
+        inp = '<input type="%s" id="%s" name="%s"%s placeholder="%s"%s%s>' % (
+            ftype, fid, name, role, ph, esph, reqa)
+        return '%s<label for="%s">%s%s%s</label>%s%s</div>' % (
+            wrap_open, fid, labinner, reqmark, help_html, inp, error)
+
+    if ftype == "textarea":
+        ph = _esc(f.get("placeholder", ""))
+        esph = ' data-es-ph="%s"' % _esc(f["es_ph"]) if bilingual and f.get("es_ph") else ""
+        inp = '<textarea id="%s" name="%s"%s placeholder="%s"%s%s></textarea>' % (
+            fid, name, role, ph, esph, reqa)
+        return '%s<label for="%s">%s%s%s</label>%s%s</div>' % (
+            wrap_open, fid, labinner, reqmark, help_html, inp, error)
+
+    if ftype == "select":
+        opts = _options_html(f["options"], f.get("es_options") if bilingual else None)
+        inp = '<select id="%s" name="%s"%s%s>%s</select>' % (fid, name, role, reqa, opts)
+        return '%s<label for="%s">%s%s%s</label>%s%s</div>' % (
+            wrap_open, fid, labinner, reqmark, help_html, inp, error)
+
+    if ftype == "file":
+        inp = '<input type="file" id="%s" name="%s"%s%s>' % (fid, name, role, reqa)
+        return '%s<label for="%s">%s%s%s</label>%s%s</div>' % (
+            wrap_open, fid, labinner, reqmark, help_html, inp, error)
+
+    if ftype in ("radio", "checkgroup"):
+        itype = "radio" if ftype == "radio" else "checkbox"
+        gridcls = "fmlg-options" + (" inline" if f.get("inline") else "")
+        if ftype == "checkgroup":
+            gridcls = "fmlg-checkgrid"
+        es_opts = f.get("es_options") if bilingual else None
+        rows = []
+        for o in f["options"]:
+            oes = ""
+            if es_opts and o in es_opts:
+                oes = ' data-es="%s"' % _esc(es_opts[o])
+            rows.append(
+                '<label class="fmlg-opt"><input type="%s" name="%s" value="%s"%s>'
+                '<span%s>%s</span></label>' % (itype, name, _esc(o), role, oes, html.escape(str(o))))
+        legend = '<span class="fmlg-legend">%s%s%s</span>' % (labinner, reqmark, help_html)
+        return '%s<div role="group" aria-label="%s">%s<div class="%s">%s</div></div>%s</div>' % (
+            wrap_open, _esc(f.get("label", "")), legend, gridcls, "".join(rows), error)
+
+    if ftype == "checkbox":  # single acknowledgment
+        yes = f.get("yes", "Yes")
+        inp = ('<label class="fmlg-single"><input type="checkbox" id="%s" name="%s" '
+               'value="%s" data-yes="%s"%s%s><span>%s%s</span></label>' % (
+                   fid, name, _esc(yes), _esc(yes), role, reqa, labinner, reqmark))
+        return '%s%s%s</div>' % (wrap_open, inp, error)
+
+    return ""
+
+
+def render_block(b, bilingual):
+    if "sec" in b:
+        es = ' data-es="%s"' % _esc(b["es"]) if bilingual and b.get("es") else ""
+        return '<div class="fmlg-section"%s>%s</div>' % (es, html.escape(b["sec"]))
+    if "note" in b:
+        cls = "fmlg-notice urgent" if b.get("urgent") else "fmlg-notice"
+        es = ' data-es="%s"' % _esc(b["es"]) if bilingual and b.get("es") else ""
+        return '<div class="%s"%s>%s</div>' % (cls, es, b["note"])
+    return render_field(b, bilingual)
+
+
+def build_form_page(slug, cfg):
+    bilingual = cfg.get("bilingual", False)
+    blocks_html = "\n      ".join(render_block(b, bilingual) for b in cfg["blocks"])
+
+    fa = ['class="fmlg-form"', "novalidate", 'data-form-id="%s"' % slug,
+          'data-thankyou="../thank-you/"', 'data-lang="en"']
+    if cfg.get("referral"):
+        fa.append('data-referral="%s"' % _esc(cfg["referral"]))
+    if cfg.get("desc"):
+        fa.append('data-desc-template="%s"' % _esc(cfg["desc"]))
+    if cfg.get("notes"):
+        fa.append('data-notes-template="%s"' % _esc(cfg["notes"]))
+    if cfg.get("state_gate"):
+        fa.append('data-state-gate="%s"' % cfg["state_gate"])
+
+    langbar = ""
+    if bilingual:
+        langbar = ('<div class="fmlg-langbar" role="group" aria-label="Language">'
+                   '<button type="button" data-lang="en" aria-pressed="true">English</button>'
+                   '<button type="button" data-lang="es" aria-pressed="false">Espa&ntilde;ol</button></div>')
+
+    h1 = cfg["h1"]
+    h1_es = ' data-es="%s"' % _esc(cfg["h1_es"]) if bilingual and cfg.get("h1_es") else ""
+    lede = cfg.get("lede", "")
+    lede_es = ' data-es="%s"' % _esc(cfg["lede_es"]) if bilingual and cfg.get("lede_es") else ""
+    lede_html = '<p class="fmlg-lede"%s>%s</p>' % (lede_es, lede) if lede else ""
+
+    submit = cfg.get("submit", "Send my request")
+    submit_es = ' data-es="%s"' % _esc(cfg["submit_es"]) if bilingual and cfg.get("submit_es") else ""
+
+    block_msg = ""
+    if cfg.get("state_gate"):
+        block_msg = ('<div class="fmlg-block">We&rsquo;re a Florida-only firm and aren&rsquo;t '
+                     'currently licensed in your state, so we can&rsquo;t take this as a matter. '
+                     'If your case is in Florida, choose <strong>FL</strong> above. Otherwise, '
+                     'thank you for reaching out.</div>')
+
+    body = """<div class="fmlg-form-wrap">
+  <hr class="fmlg-stripes">
+  <div class="fmlg-form-inner">
+    {langbar}
+    <h1{h1_es}>{h1}</h1>
+    {lede}
+    <form {formattrs}>
+      {blocks}
+      <button type="submit" class="fmlg-submit"><span{submit_es}>{submit}</span></button>
+      <div class="fmlg-form-status" role="status" aria-live="polite"></div>
+      {block_msg}
+    </form>
+  </div>
+  <hr class="fmlg-stripes">
+</div>""".format(langbar=langbar, h1_es=h1_es, h1=html.escape(h1), lede=lede_html,
+                 formattrs=" ".join(fa), blocks=blocks_html, submit_es=submit_es,
+                 submit=html.escape(submit), block_msg=block_msg)
+
+    root = "../../"  # forms/<slug>/ is depth 2
+    head_extra = '<link rel="stylesheet" href="%sassets/css/forms.css">\n' % root
+    body_extra = ('<script src="%sassets/js/forms-config.js"></script>\n'
+                  '<script src="%sassets/js/forms.js"></script>\n' % (root, root))
+    page("forms/%s/index.html" % slug, cfg["title"], cfg["desc"], body,
+         active="", head_extra=head_extra, body_extra=body_extra)
+
+
+# ---- shared field builders ---------------------------------------------------
+def _person(phone_help=True):
+    return [
+        {"name": "firstName", "label": "First name", "type": "text", "required": True, "role": "firstName"},
+        {"name": "lastName", "label": "Last name", "type": "text", "required": True, "role": "lastName"},
+        {"name": "email", "label": "Email", "type": "email", "required": True, "role": "email"},
+        {"name": "phone", "label": "Cell phone", "type": "tel", "required": True, "role": "phone",
+         "help": "Required for a conflict check." if phone_help else None},
+    ]
+
+_TEXT_CONSENT = {"name": "text_consent", "label": "OK to text you?", "type": "radio", "inline": True,
+                 "options": ["Yes", "No — email only"]}
+
+# =============================================================================
+#  FORM DEFINITIONS
+# =============================================================================
+FORMS = {}
+
+# ---- 3. Smart "Get Started" form (bilingual) --------------------------------
+FORMS["get-started"] = {
+    "title": "Get Started — Family Matters Law Group",
+    "desc": "Start your Florida family law matter. Tell us what you need and we'll route it to the right team — in English or Spanish.",
+    "bilingual": True,
+    "h1": "Get started", "h1_es": "Comencemos",
+    "lede": "Tell us what's going on. It takes two minutes, and it goes straight to our intake team.",
+    "lede_es": "Cuéntenos qué está pasando. Toma dos minutos y llega directo a nuestro equipo de admisión.",
+    "submit": "Send my request", "submit_es": "Enviar mi solicitud",
+    "referral": None,
+    "desc": "CASE TYPE: {service} | FILED: {case_filed} | SERVED: {served} | LANGUAGE: {language} | SUMMARY: {summary}",
+    "notes": "Consultation: {consultation} | Contact method: {contact_method} | For: {who_for} {who_for_detail} | Policy ack: {policy_ack}",
+    "blocks": [
+        {"name": "language", "type": "hidden", "role": "language", "value": "English"},
+        {"sec": "What you need", "es": "Lo que necesita"},
+        {"name": "service", "label": "What do you need help with?", "type": "select",
+         "required": True, "role": "service", "options": SERVICE,
+         "es_label": "¿Con qué necesita ayuda?",
+         "es_options": {
+             "Divorce/Dissolution": "Divorcio / Disolución",
+             "Child Custody & Timesharing": "Custodia y tiempo de crianza",
+             "Child Support": "Manutención de menores",
+             "Paternity": "Paternidad",
+             "Modification (Custody/Support/Alimony)": "Modificación (custodia/manutención/pensión)",
+             "Domestic Violence Injunction": "Orden de protección por violencia doméstica",
+             "Guardian ad Litem": "Tutor ad litem (Guardian ad Litem)",
+             "Mediation": "Mediación", "Name Change": "Cambio de nombre",
+             "Adoption": "Adopción", "Relocation": "Reubicación",
+             "DIY Document Help / Coaching": "Ayuda con documentos / Asesoría (DIY)",
+             "Other": "Otro"}},
+        {"sec": "About you", "es": "Sobre usted"},
+        {"name": "firstName", "label": "First name", "type": "text", "required": True, "role": "firstName",
+         "es_label": "Nombre"},
+        {"name": "lastName", "label": "Last name", "type": "text", "required": True, "role": "lastName",
+         "es_label": "Apellido"},
+        {"name": "email", "label": "Email", "type": "email", "required": True, "role": "email",
+         "es_label": "Correo electrónico"},
+        {"name": "phone", "label": "Cell phone", "type": "tel", "required": True, "role": "phone",
+         "help": "Required for a conflict check.", "es_label": "Teléfono celular",
+         "es_help": "Requerido para verificar conflictos de interés."},
+        {"name": "text_consent", "label": "OK to text you?", "type": "radio", "inline": True,
+         "options": ["Yes", "No — email only"], "es_label": "¿Podemos enviarle mensajes de texto?",
+         "es_options": {"Yes": "Sí", "No — email only": "No — solo correo"},
+         "help": "If no, expect a little more delay reaching you.",
+         "es_help": "Si elige no, puede haber un poco más de demora para contactarle."},
+        {"name": "who_for", "label": "Is this for you, or someone else?", "type": "radio", "inline": True,
+         "options": ["Myself", "Someone else"], "es_label": "¿Es para usted o para otra persona?",
+         "es_options": {"Myself": "Para mí", "Someone else": "Para otra persona"}},
+        {"name": "who_for_detail", "label": "Who is this for? (name, relationship)", "type": "text",
+         "showif": ("who_for", ["Someone else"]), "es_label": "¿Para quién es? (nombre, relación)"},
+        {"sec": "Your case", "es": "Su caso"},
+        {"name": "case_filed", "label": "Has a case already been filed?", "type": "radio", "inline": True,
+         "options": ["Yes", "No"], "es_label": "¿Ya se ha presentado un caso?",
+         "es_options": {"Yes": "Sí", "No": "No"}},
+        {"name": "party_role", "label": "Are you the Petitioner or Respondent?", "type": "radio", "inline": True,
+         "options": ["Petitioner", "Respondent"], "showif": ("case_filed", ["Yes"]),
+         "es_label": "¿Es usted el/la Peticionario(a) o Demandado(a)?",
+         "es_options": {"Petitioner": "Peticionario(a)", "Respondent": "Demandado(a)"}},
+        {"name": "served", "label": "Have you been served?", "type": "radio", "inline": True,
+         "options": ["Yes", "No"], "showif": ("case_filed", ["Yes"]),
+         "es_label": "¿Le han notificado (served)?", "es_options": {"Yes": "Sí", "No": "No"}},
+        {"name": "served_date", "label": "Date served", "type": "date", "showif": ("served", ["Yes"]),
+         "es_label": "Fecha de notificación"},
+        {"name": "case_number", "label": "Case number (optional)", "type": "text",
+         "showif": ("served", ["Yes"]), "es_label": "Número de caso (opcional)"},
+        {"name": "other_party", "label": "Other party's name", "type": "text",
+         "es_label": "Nombre de la otra parte"},
+        {"name": "summary", "label": "Briefly, what's going on?", "type": "textarea",
+         "placeholder": "2–3 sentences is plenty — you'll give details later.",
+         "es_label": "Brevemente, ¿qué está pasando?",
+         "es_ph": "Con 2 o 3 oraciones basta — dará los detalles más adelante."},
+        {"sec": "How we follow up", "es": "Cómo le damos seguimiento"},
+        {"name": "referral", "label": "How did you hear about us?", "type": "select",
+         "role": "referralType", "options": REFERRAL, "es_label": "¿Cómo se enteró de nosotros?",
+         "es_options": {"Word of Mouth": "De boca en boca", "Friend": "Un amigo", "Other": "Otro",
+                        "Website Form Inquiry": "Formulario del sitio web", "Walk-in": "Visita en persona"}},
+        {"name": "consultation", "label": "Consultation preference", "type": "radio",
+         "options": ["Free 15-min call with our senior paralegal",
+                     "Paid $250 strategy session with an attorney"],
+         "es_label": "Preferencia de consulta",
+         "es_options": {"Free 15-min call with our senior paralegal":
+                        "Llamada gratis de 15 min con nuestra paralegal senior",
+                        "Paid $250 strategy session with an attorney":
+                        "Sesión de estrategia de $250 con un abogado"}},
+        {"name": "contact_method", "label": "Preferred contact method", "type": "radio", "inline": True,
+         "options": ["Phone", "Email", "Text"], "es_label": "Método de contacto preferido",
+         "es_options": {"Phone": "Teléfono", "Email": "Correo", "Text": "Mensaje de texto"}},
+        {"name": "policy_ack", "label": "I understand the consultation policy, and that the $250 strategy-session fee is earned when the session takes place.",
+         "type": "checkbox", "required": True, "yes": "Acknowledged",
+         "es_label": "Entiendo la política de consulta y que la tarifa de $250 de la sesión de estrategia se cobra cuando ocurre la sesión."},
+        {"name": "utm_source", "type": "hidden"},
+        {"name": "utm_campaign", "type": "hidden"},
+        {"name": "landing_url", "type": "hidden", "fill": "url"},
+        {"name": "timestamp", "type": "hidden", "fill": "ts"},
+    ],
+}
+
+# ---- 4.1 DIY Document Prep/Review -------------------------------------------
+FORMS["document-prep"] = {
+    "title": "DIY Document Prep & Review — Family Matters Law Group",
+    "desc": "Request attorney-backed preparation or review of your Florida family law documents.",
+    "h1": "Document prep & review",
+    "lede": "Tell us what you're working on and we'll prepare or review the documents that matter.",
+    "submit": "Request document help",
+    "referral": "Website Form Inquiry",
+    "desc": "CASE TYPE: {matter} | COUNTY: {county} | ASSISTANCE NEEDED: {assistance} — submitted via DIY Document Prep/Review Form",
+    "notes": "Text consent: {text_consent} | Other party: {other_first} {other_last} ({other_email})",
+    "blocks": [
+        {"sec": "Your information"},
+        *_person(),
+        _TEXT_CONSENT,
+        {"sec": "The other party"},
+        {"name": "other_first", "label": "Other party — first name", "type": "text"},
+        {"name": "other_last", "label": "Other party — last name", "type": "text"},
+        {"name": "other_email", "label": "Other party — email (if known)", "type": "email"},
+        {"sec": "What you need"},
+        {"name": "matter", "label": "Matter type", "type": "select", "required": True,
+         "options": MATTER_DIY},
+        {"name": "county", "label": "County", "type": "select", "required": True, "options": FL_COUNTIES},
+        {"name": "assistance", "label": "What assistance do you need?", "type": "textarea", "required": True,
+         "placeholder": "e.g., prepare a parenting plan, review a marital settlement agreement…"},
+    ],
+}
+
+# ---- 4.2 DIY Form Package Request -------------------------------------------
+FORMS["form-package"] = {
+    "title": "DIY Form Package Request — Family Matters Law Group",
+    "desc": "Request a Florida family law form package or document completion, with optional tutorial videos.",
+    "h1": "Form package request",
+    "lede": "Need the right forms for your Florida case? Tell us your situation and we'll point you to the package that fits.",
+    "submit": "Request a package",
+    "referral": "Website Form Inquiry",
+    "desc": "FORM PACKAGE REQUEST | CASE TYPE: {matter} | KNOWS FORMS: {knows_forms} | WHICH FORMS: {which_forms} | SITUATION: {situation} | CHOICE: {package_choice} | COUNTY: {county}",
+    "notes": "Text consent: {text_consent} | Tutorial videos: {tutorial}",
+    "blocks": [
+        {"sec": "Your information"},
+        *_person(),
+        _TEXT_CONSENT,
+        {"sec": "What you need"},
+        {"name": "matter", "label": "Matter type", "type": "select", "required": True, "options": MATTER_DIY},
+        {"name": "knows_forms", "label": "Do you know which forms you need?", "type": "radio", "inline": True,
+         "options": ["Yes", "No"]},
+        {"name": "which_forms", "label": "Which form(s) do you need?", "type": "textarea",
+         "showif": ("knows_forms", ["Yes"])},
+        {"name": "situation", "label": "Briefly describe your situation", "type": "textarea",
+         "showif": ("knows_forms", ["No"]),
+         "placeholder": "We'll figure out which forms your case needs."},
+        {"name": "package_choice", "label": "How would you like to proceed?", "type": "radio",
+         "options": ["Form package only (I'll complete them)",
+                     "Form package + document completion by the firm"]},
+        {"name": "tutorial", "label": "Add optional tutorial videos with Leisa & Nazarena?", "type": "radio",
+         "inline": True, "options": ["Yes, include tutorials", "No thanks"]},
+        {"name": "county", "label": "County", "type": "select", "required": True, "options": FL_COUNTIES},
+    ],
+}
+
+# ---- 4.3 DIY Coaching & Limited Representation ------------------------------
+FORMS["coaching"] = {
+    "title": "DIY Coaching & Limited Representation — Family Matters Law Group",
+    "desc": "Request attorney coaching or limited-scope help for your Florida family law case.",
+    "h1": "DIY coaching & limited representation",
+    "lede": "Run your own case with a licensed attorney in your corner. Tell us what you're up against.",
+    "submit": "Request coaching",
+    "referral": None,
+    "desc": "CASE TYPE: {matter} | COUNTY/CITY: {county} | HELP WANTED: {help_text} — submitted via DIY Coaching Form",
+    "notes": "Text consent: {text_consent} | Other party: {other_party}",
+    "blocks": [
+        {"sec": "Your information"},
+        *_person(),
+        _TEXT_CONSENT,
+        {"name": "other_party", "label": "Other party's name", "type": "text"},
+        {"sec": "What you need"},
+        {"name": "matter", "label": "Matter type", "type": "select", "required": True, "options": MATTER_DIY},
+        {"name": "county", "label": "County / city", "type": "text", "required": True},
+        {"name": "referral", "label": "How did you hear about us?", "type": "select",
+         "role": "referralType", "options": REFERRAL_COACHING},
+        {"name": "help_text", "label": "What coaching or limited-scope help do you want?", "type": "textarea",
+         "required": True, "placeholder": "e.g., strategy for an upcoming hearing, review my filings…"},
+    ],
+}
+
+# ---- 4.4 Web Lead – General (flagged for possible retirement) ---------------
+FORMS["general"] = {
+    "title": "Contact Us — Family Matters Law Group",
+    "desc": "General contact form for Family Matters Law Group, a Florida family law firm.",
+    "h1": "Get in touch",
+    "lede": "A general way to reach us. For a specific matter, the Get Started form routes you faster.",
+    "submit": "Send message",
+    "referral": "Web",
+    "state_gate": "state",
+    "desc": "WEB LEAD — GENERAL | STATE: {state} | SUMMARY: {summary}",
+    "notes": "Preferred contact: {contact_method}",
+    "blocks": [
+        {"sec": "Your information"},
+        {"name": "firstName", "label": "First name", "type": "text", "required": True, "role": "firstName"},
+        {"name": "lastName", "label": "Last name", "type": "text", "required": True, "role": "lastName"},
+        {"name": "email", "label": "Email", "type": "email", "required": True, "role": "email"},
+        {"name": "phone", "label": "Phone", "type": "tel", "role": "phone"},
+        {"name": "contact_method", "label": "Preferred contact method", "type": "radio", "inline": True,
+         "options": ["Phone", "Email", "Text"]},
+        {"name": "state", "label": "State", "type": "text", "required": True,
+         "help": "We're a Florida-only firm — enter FL if your matter is in Florida."},
+        {"sec": "How can we help?"},
+        {"name": "summary", "label": "Briefly, what's going on?", "type": "textarea", "required": True},
+    ],
+}
+
+# ---- 4.5 Files for Review ----------------------------------------------------
+FORMS["files-review"] = {
+    "title": "Submit Files for Review — Family Matters Law Group",
+    "desc": "Securely submit documents to Family Matters Law Group for review.",
+    "h1": "Submit files for review",
+    "lede": "Send us the documents you'd like us to look at. We'll follow up after review.",
+    "submit": "Submit files",
+    "referral": "Website Form Inquiry",
+    "desc": "Submitted files for review — see attachment in form notification email. FILE: {upload}",
+    "notes": "",
+    "blocks": [
+        {"note": "Uploaded files are routed to our team by email and filed by staff — never automatically. "
+                 "Someone will confirm receipt.", },
+        {"name": "firstName", "label": "First name", "type": "text", "required": True, "role": "firstName"},
+        {"name": "lastName", "label": "Last name", "type": "text", "required": True, "role": "lastName"},
+        {"name": "email", "label": "Email", "type": "email", "required": True, "role": "email"},
+        {"name": "upload", "label": "Upload your file(s)", "type": "file", "required": True},
+    ],
+}
+
+# ---- 4.6 Book Free Consultation ---------------------------------------------
+FORMS["free-consult"] = {
+    "title": "Book a Free Consultation — Family Matters Law Group",
+    "desc": "Request a free 15-minute consultation with our senior paralegal.",
+    "h1": "Book a free consultation",
+    "lede": "Request a free 15-minute call with our senior paralegal to point you in the right direction.",
+    "submit": "Request my consultation",
+    "referral": "Website Form Inquiry",
+    "desc": "Requested free consultation with senior paralegal.",
+    "notes": "Cell: {phone}",
+    "blocks": [
+        {"name": "firstName", "label": "First name", "type": "text", "required": True, "role": "firstName"},
+        {"name": "lastName", "label": "Last name", "type": "text", "required": True, "role": "lastName"},
+        {"name": "email", "label": "Email", "type": "email", "required": True, "role": "email"},
+        {"name": "phone", "label": "Cell phone", "type": "tel", "required": True, "role": "phone"},
+    ],
+}
+
+# ---- 4.7 Mediation -----------------------------------------------------------
+FORMS["mediation"] = {
+    "title": "Mediation Intake — Family Matters Law Group",
+    "desc": "Request certified, bilingual family mediation in Florida — with or without attorneys.",
+    "h1": "Mediation intake",
+    "lede": "Tell us about both sides and what needs resolving. Our certified mediators handle it in English or Spanish.",
+    "submit": "Request mediation",
+    "referral": "Website Form Inquiry",
+    "desc": "MEDIATION INTAKE | NEEDS: {needs} | OTHER PARTY: {other_party} | ATTORNEY REP: {atty_rep} {atty_name} {atty_email} | COUNTY: {county} | CASE: {case_desc} | MEDIATOR PREF: {mediator_pref}",
+    "notes": "Client phone: {phone}",
+    "blocks": [
+        {"sec": "Your information"},
+        {"name": "firstName", "label": "First name", "type": "text", "required": True, "role": "firstName"},
+        {"name": "lastName", "label": "Last name", "type": "text", "required": True, "role": "lastName"},
+        {"name": "email", "label": "Email", "type": "email", "required": True, "role": "email"},
+        {"name": "phone", "label": "Phone", "type": "tel", "required": True, "role": "phone"},
+        {"sec": "The other party"},
+        {"name": "other_party", "label": "Other party's name", "type": "text"},
+        {"name": "other_email", "label": "Other party's email", "type": "email"},
+        {"name": "other_phone", "label": "Other party's cell", "type": "tel"},
+        {"sec": "Attorneys"},
+        {"name": "atty_rep", "label": "Is either party represented by an attorney?", "type": "radio",
+         "inline": True, "options": ["Yes", "No"]},
+        {"name": "atty_name", "label": "Attorney name(s)", "type": "text", "showif": ("atty_rep", ["Yes"])},
+        {"name": "atty_email", "label": "Attorney email(s)", "type": "email", "showif": ("atty_rep", ["Yes"])},
+        {"sec": "What needs resolving"},
+        {"name": "needs", "label": "What needs to be worked out? (check all that apply)", "type": "checkgroup",
+         "options": ["Parenting Plan", "Child Support", "Real Estate", "Debts & Assets", "Alimony",
+                     "Attorney's Fees", "Domestic Violence", "Substance Abuse"]},
+        {"name": "case_desc", "label": "Briefly describe the situation", "type": "textarea", "required": True},
+        {"name": "county", "label": "County (Florida)", "type": "select", "required": True, "options": FL_COUNTIES},
+        {"name": "mediator_pref", "label": "Mediator preference or notes (optional)", "type": "textarea"},
+    ],
+}
+
+# ---- 4.8 Guardian ad Litem ---------------------------------------------------
+FORMS["guardian-ad-litem"] = {
+    "title": "Guardian ad Litem Referral — Family Matters Law Group",
+    "desc": "Refer a case for a Guardian ad Litem in Florida — for parents, attorneys, and courts.",
+    "h1": "Guardian ad Litem referral",
+    "lede": "GAL referrals carry more detail than a typical inquiry. Give us the case picture and we'll follow up.",
+    "submit": "Submit referral",
+    "referral": None,
+    "desc": "GAL REFERRAL | CASE STATUS: {case_status} | CASE #: {case_number} | FILING DATE: {filing_date} | COUNTY: {county} | CASE: {case_desc}",
+    "notes": "Parent 1: {p1_name} ({p1_phone}, {p1_email}) | Parent 2: {p2_name} ({p2_phone}, {p2_email}) | Attorneys: {atty_rep} {atty_name}",
+    "blocks": [
+        {"sec": "Parent 1"},
+        {"name": "p1_name", "label": "Parent 1 — full name", "type": "text", "required": True, "role": "firstName"},
+        {"name": "p1_address", "label": "Parent 1 — address", "type": "text"},
+        {"name": "p1_email", "label": "Parent 1 — email", "type": "email", "required": True, "role": "email"},
+        {"name": "p1_phone", "label": "Parent 1 — phone", "type": "tel", "required": True, "role": "phone"},
+        {"sec": "Parent 2"},
+        {"name": "p2_name", "label": "Parent 2 — full name", "type": "text", "role": "lastName"},
+        {"name": "p2_dob", "label": "Parent 2 — date of birth", "type": "date"},
+        {"name": "p2_phone", "label": "Parent 2 — phone", "type": "tel"},
+        {"name": "p2_email", "label": "Parent 2 — email", "type": "email"},
+        {"sec": "The case"},
+        {"name": "atty_rep", "label": "Are the parents represented by attorneys?", "type": "radio",
+         "inline": True, "options": ["Both", "One", "Neither"]},
+        {"name": "atty_name", "label": "Attorney name(s)", "type": "text", "showif": ("atty_rep", ["Both", "One"])},
+        {"name": "case_status", "label": "Case status", "type": "text",
+         "placeholder": "e.g., pending, post-judgment, pre-filing"},
+        {"name": "case_number", "label": "Case number", "type": "text"},
+        {"name": "filing_date", "label": "Filing date", "type": "date"},
+        {"name": "county", "label": "County (Florida)", "type": "select", "required": True, "options": FL_COUNTIES},
+        {"name": "case_desc", "label": "Describe the case", "type": "textarea", "required": True},
+        {"name": "referral", "label": "How did you hear about us?", "type": "select",
+         "role": "referralType", "options": REFERRAL_GAL},
+    ],
+}
+
+# ---- 4.9 Domestic Violence / Injunction -------------------------------------
+FORMS["domestic-violence"] = {
+    "title": "Domestic Violence / Injunction Intake — Family Matters Law Group",
+    "desc": "Intake for domestic violence and injunction matters in Florida. Submissions are reviewed promptly.",
+    "h1": "Domestic violence / injunction intake",
+    "lede": "This form carries the detail these cases need. Take your time — and if you're in immediate danger, call 911.",
+    "submit": "Submit intake",
+    "referral": None,
+    "desc": "URGENT — DV/INJUNCTION INTAKE | POSTURE: {posture} | SERVED: {served} | INJUNCTION TYPE: {injunction_type} | COUNTY: {county} | POLICE: {police} | EVIDENCE: {evidence} | ALLEGATIONS: {narrative}",
+    "notes": "Address: {address} | Marital status: {marital_status} | Other party: {other_party} ({other_relationship}) | Children: {has_children} {children_detail}",
+    "blocks": [
+        {"note": "<strong>These submissions are reviewed promptly</strong> given how time-sensitive they are. "
+                 "If you are in immediate danger, call 911. If you need the National DV Hotline: 1-800-799-7233.",
+         "urgent": True},
+        {"sec": "Your information"},
+        {"name": "firstName", "label": "First name", "type": "text", "required": True, "role": "firstName"},
+        {"name": "lastName", "label": "Last name", "type": "text", "required": True, "role": "lastName"},
+        {"name": "phone", "label": "Cell phone", "type": "tel", "required": True, "role": "phone"},
+        {"name": "email", "label": "Email", "type": "email", "required": True, "role": "email"},
+        {"name": "county", "label": "County (Florida)", "type": "select", "required": True, "options": FL_COUNTIES},
+        {"name": "address", "label": "Residential address", "type": "text"},
+        {"name": "marital_status", "label": "Marital status", "type": "select",
+         "options": ["Single", "Married", "Separated", "Divorced", "Other"]},
+        {"sec": "The case"},
+        {"name": "posture", "label": "Are you filing, or responding to a petition?", "type": "radio",
+         "inline": True, "options": ["I'm filing", "I'm the respondent"]},
+        {"name": "served", "label": "Have you been served?", "type": "radio", "inline": True,
+         "options": ["Yes", "No"]},
+        {"name": "served_case", "label": "Case number", "type": "text", "showif": ("served", ["Yes"])},
+        {"name": "served_date", "label": "Date served", "type": "date", "showif": ("served", ["Yes"])},
+        {"name": "injunction_type", "label": "Type of injunction", "type": "select", "required": True,
+         "options": ["Domestic Violence", "Repeat Violence", "Dating Violence", "Sexual Violence", "Stalking"]},
+        {"sec": "The other party"},
+        {"name": "other_party", "label": "Other party's name", "type": "text", "required": True},
+        {"name": "other_relationship", "label": "Relationship to you", "type": "text"},
+        {"name": "other_address", "label": "Other party's address", "type": "text"},
+        {"name": "other_phone", "label": "Other party's phone", "type": "tel"},
+        {"name": "other_email", "label": "Other party's email", "type": "email"},
+        {"sec": "Children"},
+        {"name": "has_children", "label": "Are minor children involved?", "type": "radio", "inline": True,
+         "options": ["Yes", "No"]},
+        {"name": "children_detail", "label": "Children — names, ages/DOBs, count", "type": "textarea",
+         "showif": ("has_children", ["Yes"])},
+        {"sec": "What happened"},
+        {"name": "narrative", "label": "Describe what happened", "type": "textarea", "required": True,
+         "placeholder": "Share what you're comfortable putting in writing. We'll go deeper by phone."},
+        {"name": "police", "label": "Was law enforcement involved?", "type": "radio", "inline": True,
+         "options": ["Yes", "No"]},
+        {"name": "police_detail", "label": "Police involvement — details (report #, agency)", "type": "textarea",
+         "showif": ("police", ["Yes"])},
+        {"name": "evidence", "label": "Do you have evidence (texts, photos, records)?", "type": "radio",
+         "inline": True, "options": ["Yes", "No"]},
+        {"name": "evidence_detail", "label": "Describe the evidence", "type": "textarea",
+         "showif": ("evidence", ["Yes"])},
+        {"name": "referral", "label": "How did you hear about us?", "type": "select",
+         "role": "referralType", "options": REFERRAL},
+    ],
+}
+
+_FORM_ORDER = ["get-started", "document-prep", "form-package", "coaching", "general",
+               "files-review", "free-consult", "mediation", "guardian-ad-litem",
+               "domestic-violence"]
+for _slug in _FORM_ORDER:
+    build_form_page(_slug, FORMS[_slug])
+
+# ---- Confirmation / thank-you page ------------------------------------------
+_thanks_root = "../../"
+_thanks_body = """<div class="fmlg-form-wrap">
+  <hr class="fmlg-stripes">
+  <div class="fmlg-thanks">
+    <div class="fmlg-check" aria-hidden="true">&#10003;</div>
+    <h1 data-es="Gracias — hemos recibido su solicitud">Thank you — we've got it</h1>
+    <p data-es="Su información llegó a nuestro equipo de admisión. Una persona real revisará lo que envió y le contactará por el método que prefirió. Si es urgente, llámenos.">Your information reached our intake team. A real person will review what you sent and follow up the way you asked us to. If it's urgent, please call us.</p>
+    <div class="fmlg-paybox">
+      <h2 data-es="Reserve su sesión de estrategia de $250">Reserve your $250 strategy session</h2>
+      <p data-es="Eligió la sesión de estrategia pagada con un abogado. Puede reservar y pagar de forma segura aquí — la tarifa se cobra cuando ocurre la sesión.">You chose the paid strategy session with an attorney. You can book and pay securely here — the fee is earned when the session takes place.</p>
+      <a class="fmlg-paybtn" href="https://secure.lawpay.com/pages/familymatterslawgroup/strategy-session" target="_blank" rel="noopener" data-es="Pagar y reservar &rarr;">Pay &amp; book &rarr;</a>
+    </div>
+    <p style="margin-top:30px;"><a href="../../" style="color:#00B5B8;font-weight:600;">&larr; Back to familymatterslawgroup.com</a></p>
+  </div>
+  <hr class="fmlg-stripes">
+</div>"""
+page("forms/thank-you/index.html", "Thank You — Family Matters Law Group",
+     "Thanks for reaching out to Family Matters Law Group. Your request has been received.",
+     _thanks_body, active="",
+     head_extra='<link rel="stylesheet" href="%sassets/css/forms.css">\n' % _thanks_root,
+     body_extra=('<script src="%sassets/js/forms-config.js"></script>\n'
+                 '<script src="%sassets/js/forms.js"></script>\n' % (_thanks_root, _thanks_root)))
 
 # =============================================================================
 #  WRITE
