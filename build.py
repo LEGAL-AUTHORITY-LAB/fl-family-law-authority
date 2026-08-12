@@ -190,9 +190,10 @@ def footer(root):
 </footer>"""
 
 
-def page(relpath, title, desc, body, active="", is_home=False, head_extra="", body_extra=""):
+def page(relpath, title, desc, body, active="", is_home=False, head_extra="", body_extra="", body_class=""):
     root = root_for(relpath)
-    cls = ' class="home"' if is_home else ""
+    classes = (["home"] if is_home else []) + ([body_class] if body_class else [])
+    cls = (' class="%s"' % " ".join(classes)) if classes else ""
     doc = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1932,7 +1933,7 @@ def build_form_page(slug, cfg):
     body_extra = ('<script src="%sassets/js/forms-config.js"></script>\n'
                   '<script src="%sassets/js/forms.js"></script>\n' % (root, root))
     page("forms/%s/index.html" % slug, cfg["title"], cfg["desc"], body,
-         active="", head_extra=head_extra, body_extra=body_extra)
+         active="", head_extra=head_extra, body_extra=body_extra, body_class="solid-nav")
 
 
 # ---- shared field builders ---------------------------------------------------
@@ -2353,7 +2354,7 @@ _thanks_body = """<div class="fmlg-form-wrap">
 </div>"""
 page("forms/thank-you/index.html", "Thank You — Family Matters Law Group",
      "Thanks for reaching out to Family Matters Law Group. Your request has been received.",
-     _thanks_body, active="",
+     _thanks_body, active="", body_class="solid-nav",
      head_extra='<link rel="stylesheet" href="%sassets/css/forms.css">\n' % _thanks_root,
      body_extra=('<script src="%sassets/js/forms-config.js"></script>\n'
                  '<script src="%sassets/js/forms.js"></script>\n' % (_thanks_root, _thanks_root)))

@@ -16,9 +16,12 @@
   /* Brand */
   --pink:#ec0a8c;
   --pink-bright:#ff1fab;
+  --pink-deep:#c40a78;      /* AA text-safe: white-on-pink 5.7:1 */
   --orange:#fb5c0e;
+  --orange-deep:#c24e00;    /* AA text-safe: white-on-orange 4.8:1 */
   --chartreuse:#c3d600;
   --teal:#00a6a6;
+  --teal-deep:#00807f;      /* AA text-safe: white-on-teal 4.8:1 */
 
   /* Neutrals (warm bias to match the photography) */
   --ink:#16130f;
@@ -88,8 +91,8 @@ p{margin:0;}
   white-space:nowrap;cursor:pointer;border:0;
 }
 .btn:hover{transform:translateY(-2px);}
-.btn-solid{background:var(--pink);color:#fff;box-shadow:0 12px 28px rgba(236,10,140,.34);}
-.btn-solid:hover{background:var(--pink-bright);}
+.btn-solid{background:var(--pink-deep);color:#fff;box-shadow:0 12px 28px rgba(236,10,140,.34);}
+.btn-solid:hover{background:var(--pink);}
 .btn-ink{background:var(--ink);color:var(--paper);}
 .btn-outline{border:1.6px solid var(--line);color:var(--ink);}
 .btn-outline:hover{background:rgba(22,19,15,.05);}
@@ -118,11 +121,11 @@ nav.links a:hover{opacity:1;}
   border:1.4px solid rgba(255,255,255,.45);border-radius:999px;padding:6px 12px;opacity:1 !important;}
 header.site.scrolled .nav-lang{border-color:var(--line);}
 .nav-cta{
-  background:var(--pink);color:#fff !important;opacity:1 !important;
+  background:var(--pink-deep);color:#fff !important;opacity:1 !important;
   padding:11px 20px;border-radius:999px;font-size:12.5px;font-weight:700;
   letter-spacing:.05em;text-transform:uppercase;box-shadow:0 6px 18px rgba(236,10,140,.35);
 }
-.nav-cta:hover{background:var(--pink-bright);}
+.nav-cta:hover{background:var(--pink);}
 .nav-toggle{display:none;background:none;border:0;width:34px;height:24px;position:relative;cursor:pointer;z-index:200;}
 .nav-toggle span{position:absolute;left:0;right:0;height:2.5px;border-radius:2px;background:var(--paper);transition:transform .3s var(--ease),opacity .3s,background .3s;}
 header.site.scrolled .nav-toggle span{background:var(--ink);}
@@ -490,7 +493,21 @@ header.site.scrolled .menu-btn{color:var(--ink);}
 .formlinks a{display:inline-block;background:var(--paper);border:1.5px solid var(--line);
   border-radius:999px;padding:11px 18px;font-size:14.5px;font-weight:600;color:var(--ink);
   text-decoration:none;transition:.15s;}
-.formlinks a:hover{border-color:var(--pink);color:var(--pink);transform:translateY(-1px);}
+.formlinks a:hover{border-color:var(--pink-deep);color:var(--pink-deep);transform:translateY(-1px);}
+
+/* ---------- solid header for light-top pages (forms, thank-you) ----------
+   Uses an OPAQUE background (no backdrop-filter): a filtered header would
+   become the containing block for the fixed mobile nav and break its
+   off-screen translate. */
+body.solid-nav header.site{background:var(--paper);
+  padding:11px 0;box-shadow:0 1px 0 var(--line);}
+body.solid-nav .nav-logo .logo-white{display:none;}
+body.solid-nav .nav-logo .logo-black{display:block;}
+body.solid-nav nav.links a{color:var(--ink);}
+body.solid-nav .menu-btn{color:var(--ink);}
+body.solid-nav .nav-lang{border-color:var(--line);}
+body.solid-nav .nav-toggle span{background:var(--ink);}
+body.solid-nav main{padding-top:66px;}
 
 /* ---------- CTA band ---------- */
 .cta-band{background:var(--ink);color:var(--paper);border-radius:var(--radius);padding:44px 40px;
