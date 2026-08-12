@@ -105,7 +105,7 @@ header.site{
   padding:20px 0;transition:background .35s var(--ease),padding .35s var(--ease),box-shadow .35s var(--ease);
 }
 header.site.scrolled{
-  background:rgba(251,250,247,.94);backdrop-filter:blur(10px);
+  background:var(--paper);
   padding:11px 0;box-shadow:0 1px 0 var(--line);
 }
 .nav-row{display:flex;align-items:center;justify-content:space-between;gap:24px;}
@@ -149,14 +149,20 @@ header.site.scrolled .nav-toggle span{background:var(--ink);}
 /* ---------- Hero (split: copy panel + both attorneys) ---------- */
 .hero{position:relative;min-height:100svh;display:grid;grid-template-columns:1.02fr 0.98fr;
   background:var(--charcoal);overflow:hidden;}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:130px;z-index:3;
+  pointer-events:none;background:linear-gradient(180deg,rgba(20,18,16,.55),rgba(20,18,16,0));}
 .hero-copy{display:flex;align-items:center;background:var(--charcoal);
   padding:150px 52px 74px max(32px, calc((100vw - var(--max))/2));}
 .hero-copy-inner{width:100%;max-width:35rem;}
-.hero-photo{position:relative;background:url('../images/team-laptop.jpg') center 26%/cover no-repeat;}
-.hero-photo::before{content:'';position:absolute;inset:0;
-  background:
-    linear-gradient(180deg, rgba(20,18,16,.62) 0%, rgba(20,18,16,0) 24%),
-    linear-gradient(90deg, var(--charcoal) 0%, rgba(20,18,16,0) 14%);}
+/* Hero photo: show the WHOLE duo (both attorneys), contained over a blurred
+   backdrop of itself — never crop a person out of frame. */
+.hero-photo{position:relative;overflow:hidden;background-color:var(--charcoal);
+  background-image:url('../images/team-laptop.jpg');background-size:cover;background-position:center;}
+.hero-photo::before{content:'';position:absolute;inset:0;background-image:inherit;
+  background-size:cover;background-position:center;
+  filter:blur(30px) brightness(.66) saturate(1.05);transform:scale(1.18);}
+.hero-photo::after{content:'';position:absolute;inset:0;background-image:inherit;
+  background-size:contain;background-position:center;background-repeat:no-repeat;}
 .hero-chevrons{height:30px;margin-bottom:26px;opacity:0;}
 .hero-chevrons img{height:100%;width:auto;}
 .hero-chevrons.run{animation:fade .6s var(--ease) forwards;}
@@ -487,6 +493,21 @@ header.site.scrolled .menu-btn{color:var(--ink);}
 .pf-ract{display:flex;gap:12px;flex-wrap:wrap;}
 .pf-foot{margin-top:16px;text-align:center;}
 @media(max-width:560px){.pf-ract .btn{width:100%;}}
+
+/* ---------- feature photo band (whole photo, never cropped) ---------- */
+.feature-band{padding:46px 0;}
+.fb-frame{position:relative;overflow:hidden;border-radius:var(--radius);
+  height:clamp(360px,54vh,560px);display:flex;align-items:center;justify-content:center;
+  background-color:var(--sage);background-size:cover;background-position:center;}
+.fb-frame::before{content:"";position:absolute;inset:0;background-image:inherit;
+  background-size:cover;background-position:center;
+  filter:blur(26px) brightness(.82) saturate(1.06);transform:scale(1.14);}
+.fb-img{position:relative;z-index:1;max-height:100%;max-width:100%;width:auto;height:auto;
+  display:block;border-radius:8px;box-shadow:0 18px 48px rgba(0,0,0,.30);}
+@media (max-width:700px){
+  .feature-band{padding:30px 0;}
+  .fb-frame{height:clamp(320px,64vh,460px);}
+}
 
 /* ---------- form links (Get Started) ---------- */
 .formlinks{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}

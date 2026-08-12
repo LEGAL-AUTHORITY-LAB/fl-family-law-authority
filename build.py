@@ -56,13 +56,17 @@ FEAT_GAL       = photo("svc-gal.jpg", default="")
 FEAT_ABOUT     = photo("about-duo.jpg", default="")
 FEAT_COPARENT  = photo("coparenting.jpg", default="")
 
-def feature(root, fn, pos="center 22%"):
+def feature(root, fn, pos=None):
+    """Full-bleed photo band. The image is shown WHOLE (contained) over a
+    blurred backdrop of itself, so heads and bodies are never cropped —
+    portrait and landscape source photos both display correctly."""
     if not fn:
         return ""
-    return (f'<section class="section paper" style="padding-top:0;padding-bottom:0">'
-            f'<div class="wrap"><img src="{root}assets/images/{fn}" alt="Family Matters Law Group" '
-            f'style="width:100%;max-height:540px;object-fit:cover;object-position:{pos};'
-            f'border-radius:var(--radius);display:block"></div></section>')
+    src = f"{root}assets/images/{fn}"
+    return (f'<section class="feature-band"><div class="wrap">'
+            f'<div class="fb-frame" style="background-image:url({src})">'
+            f'<img class="fb-img" src="{src}" alt="Family Matters Law Group" loading="lazy">'
+            f'</div></div></section>')
 
 
 def add(relpath, html_str):
