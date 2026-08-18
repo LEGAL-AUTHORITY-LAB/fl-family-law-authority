@@ -19,13 +19,17 @@ BLOG_SRC = os.path.join(ROOT_DIR, "content", "blog-src")
 #  deep links are supplied.)
 CUR = "https://www.familymatterslawgroup.com"
 SPANISH = "https://www.abogada-familiar.com"
+# Current live intake deep links (matter-intake.com) — the working intake for now.
+_MI = "https://matter-intake.com/create/"
 CTA = {
-    "get_started": CUR + "/get-started",
-    "lawyers":     CUR + "/legal-representation",
-    "mediators":   CUR + "/mediation",
-    "coaches":     CUR + "/diy-legal-individualized-coaching",
-    "gal":         CUR + "/guardian-ad-litem",
-    "reviews_ext": CUR + "/recommendations",
+    "get_started": CUR + "/get-started",  # header/footer overridden to internal /get-started/ hub
+    "lawyers":     _MI + "9e20e620-04b7-43b4-a774-03b604bf2b74",   # Legal Representation
+    "mediators":   _MI + "cc4549a6-62a2-47e7-bc40-4c496e545433",   # Mediation
+    "coaches":     _MI + "c240e642-e5f5-4646-ab5a-3bb48c26930e",   # Private Coaching / Limited Rep
+    "gal":         _MI + "8112f931-33f5-4e6e-9eda-cffdbdf2a71e",   # Guardian ad Litem
+    "paralegal":   _MI + "ddaa570b-c43c-403c-938f-d50101e6ccc1",   # Paralegal Services
+    "uncontested": _MI + "4fa2dbb9-e180-452b-a696-8f9887f3bf04",   # Uncontested Divorce Packet
+    "reviews_ext": "https://g.page/r/Cfy_EtvIJidIEBE/review",       # real Google review link
 }
 
 SVC_COLOR = {"lawyers": "var(--pink)", "mediators": "var(--teal)",
@@ -144,7 +148,7 @@ def header(root, active=""):
     <nav class="links" id="navLinks">{ways}{topics}
       <a href="{root}pricing/">Pricing</a>{learn}{about}
       <a class="nav-lang" href="{root}es/" hreflang="es" lang="es">ES</a>
-      <a href="{CTA['get_started']}" class="nav-cta">Get started</a>
+      <a href="{root}get-started/" class="nav-cta">Get started</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
@@ -157,7 +161,7 @@ def footer(root):
   <div class="wrap footer-cta">
     <span class="script">Ready when you are.</span>
     <h2 class="display">Let's talk.</h2>
-    <a href="{CTA['get_started']}" class="btn btn-solid">Get started</a>
+    <a href="{root}get-started/" class="btn btn-solid">Get started</a>
   </div>
   <div class="wrap footer-grid">
     <div>
@@ -258,11 +262,11 @@ def path_finder(root):
     """Interactive 'which service fits you' router for the Get Started page."""
     import json
     routes = {
-        "lawyers":   root + "forms/get-started/",
-        "mediators": root + "ways-we-help/mediators/#book",
-        "coaches":   root + "forms/coaching/",
-        "gal":       root + "forms/guardian-ad-litem/",
-        "consult":   root + "forms/free-consult/",
+        "lawyers":   CTA["lawyers"],
+        "mediators": CTA["mediators"],
+        "coaches":   CTA["coaches"],
+        "gal":       CTA["gal"],
+        "consult":   CTA["lawyers"],
     }
     tpl = r"""
 <section class="section paper"><div class="wrap measure">
@@ -363,8 +367,8 @@ def svc_hero_ctas(key, root, secondary_label="See pricing", secondary_href_rel="
 # --- Lawyers -----------------------------------------------------------------
 root = "../../"
 add_body = f"""
-{page_hero("Lawyers · Full representation", "When you want someone to carry the whole case",
-  "Full and flat-fee representation for divorce, custody, paternity, support, and enforcement — from the first filing through settlement or trial. You get a licensed Florida family lawyer running your case, not a form and a phone tree.",
+{page_hero("Lawyers · Selective representation", "When you want someone to carry the whole case",
+  "We settle what can be settled — most family cases should never turn into a war. But when a matter genuinely needs a litigator, you get one who has been in the room. Full and flat-fee representation for divorce, custody, paternity, support, and enforcement. We're experienced and deliberately selective about the cases we take for full litigation, so representation starts with a paid attorney consult to confirm the fit.",
   root, [("Ways we help", "ways-we-help/lawyers/"), ("Lawyers", "")], tint="tint-lawyers",
   ctas=[f'<a href="{CTA["lawyers"]}" class="btn btn-solid">Start your intake</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See flat-fee pricing</a>'])}
@@ -374,7 +378,8 @@ add_body = f"""
     <div class="prose">
       <div class="kicker">Three ways to be represented</div>
       <h2>Pick the level of representation that fits the case</h2>
-      <p>Not every case needs the same thing. Some need a lawyer on every hearing; some need a fixed price for a known, uncontested outcome; some need a lawyer for one specific hearing and nothing more. We offer all three, and we'll tell you honestly which one your situation actually calls for.</p>
+      <p>Not every case needs the same thing. Some need a lawyer on every hearing; some need a fixed price for a known, uncontested outcome; some need a lawyer for one specific hearing and nothing more. We offer all three, and we'll tell you honestly which one your situation actually calls for — including when mediation or a DIY path would serve you better than litigation.</p>
+      <div class="callout pink"><strong>Full litigation is by paid consult only.</strong> We're selective about the contested cases we take on, so we can give the ones we accept the attention they need. The consult is where we confirm the fit — for you and for us.</div>
     </div>
     <aside class="aside-card">
       <h4>On this page</h4>
@@ -691,7 +696,7 @@ body = f"""
   </div>
 </section>
 
-{cta_band(root,"orange","Documents done right, without the full retainer.","Start with paralegal prep, add coaching whenever you want an attorney's read.","Get started",CTA["coaches"])}
+{cta_band(root,"orange","Documents done right, without the full retainer.","Start with paralegal prep, add coaching whenever you want an attorney's read.","Start paralegal intake",CTA["paralegal"])}
 """
 page("ways-we-help/paralegal-services/index.html",
      "Paralegal Document Services | Family Matters Law Group",
@@ -703,7 +708,7 @@ body = f"""
 {page_hero("DIY Divorce Packages", "You can DIY your divorce. Don't do it alone.",
   "Three honest tiers for an uncontested Florida divorce — from paralegal-drafted documents to a full-service package — so you can choose the level of help you actually want at a glance.",
   root, [("Ways we help","ways-we-help/diy-legal-coaches/"),("DIY Divorce Packages","")], tint="tint-coaches",
-  ctas=[f'<a href="{CTA["coaches"]}" class="btn btn-solid">Start your divorce</a>',
+  ctas=[f'<a href="{CTA["uncontested"]}" class="btn btn-solid">Start your divorce</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">Compare all pricing</a>'])}
 {feature(root, photo("page-diy-divorce.jpg", default=""))}
 <section class="section paper">
@@ -726,7 +731,7 @@ body = f"""
   </div>
 </section>
 
-{cta_band(root,"orange","Ready to start your uncontested divorce?","Tell us your situation and we'll point you to the right tier.","Start your divorce",CTA["coaches"])}
+{cta_band(root,"orange","Ready to start your uncontested divorce?","Tell us your situation and we'll point you to the right tier.","Start your divorce",CTA["uncontested"])}
 """
 page("ways-we-help/diy-divorce-packages/index.html",
      "DIY Divorce Packages | Family Matters Law Group",
@@ -738,7 +743,7 @@ body = f"""
 {page_hero("Parenting Coordination", "Staying out of court on the day-to-day conflicts",
   "Parenting coordination is a structured, out-of-court process to help high-conflict coparents resolve the ongoing disputes a parenting plan can't fully cover — with a transparent sliding-scale rate stated plainly.",
   root, [("Ways we help","ways-we-help/diy-legal-coaches/"),("Parenting Coordination","")], tint="tint-mediators",
-  ctas=[f'<a href="{CTA["get_started"]}" class="btn btn-solid">Get started</a>'])}
+  ctas=[f'<a href="{root}get-started/" class="btn btn-solid">Get started</a>'])}
 {feature(root, photo("page-parenting-coord.jpg", default=""))}
 <section class="section paper">
   <div class="wrap measure">
@@ -757,7 +762,7 @@ body = f"""
   </div>
 </section>
 
-{cta_band(root,"teal","Stuck in the same fight every other week?","A parenting coordinator can break the loop — without another trip to court.","Get started",CTA["get_started"])}
+{cta_band(root,"teal","Stuck in the same fight every other week?","A parenting coordinator can break the loop — without another trip to court.","Get started",root + "get-started/")}
 """
 page("ways-we-help/parenting-coordination/index.html",
      "Parenting Coordination | Family Matters Law Group",
@@ -769,7 +774,7 @@ body = f"""
 {page_hero("Collaborative Divorce", "Divorce doesn't have to be ugly",
   "Collaborative divorce is a structured, out-of-court process where both spouses and their professionals commit to reaching a settlement without litigation. It can be thoughtful, strategic, and peaceful — without sacrificing fairness.",
   root, [("Ways we help","ways-we-help/collaborative-divorce/"),("Collaborative Divorce","")], tint="tint-mediators",
-  ctas=[f'<a href="{CTA["get_started"]}" class="btn btn-solid">See if it fits</a>'])}
+  ctas=[f'<a href="{root}get-started/" class="btn btn-solid">See if it fits</a>'])}
 {feature(root, photo("page-collaborative.jpg", default=""))}
 <section class="section paper">
   <div class="wrap measure prose">
@@ -780,7 +785,7 @@ body = f"""
   </div>
 </section>
 
-{cta_band(root,"teal","Want a calmer way through?","We'll help you decide whether collaborative divorce is realistic for your family.","See if it fits",CTA["get_started"])}
+{cta_band(root,"teal","Want a calmer way through?","We'll help you decide whether collaborative divorce is realistic for your family.","See if it fits",root + "get-started/")}
 """
 page("ways-we-help/collaborative-divorce/index.html",
      "Collaborative Divorce | Family Matters Law Group",
@@ -811,7 +816,7 @@ def build_topic(slug, mtitle, mdesc, eyebrow, h1, lede, main_html, faqs, related
           <h2 class="h2" style="margin-bottom:18px;">Straight answers</h2>{faq(faqs)}</div></section>"""
     body = f"""
 {page_hero(eyebrow, h1, lede, root, [("Topics","topics/"+slug+"/"),(h1.split("—")[0].strip(),"")], tint=tint,
-  ctas=[f'<a href="{CTA["get_started"]}" class="btn btn-solid">Get started</a>',
+  ctas=[f'<a href="{root}get-started/" class="btn btn-solid">Get started</a>',
         f'<a href="{root}pricing/" class="btn btn-outline-light">See pricing</a>'])}
 {feature(root, photo(feat, default=""))}
 {main_html}
@@ -821,7 +826,7 @@ def build_topic(slug, mtitle, mdesc, eyebrow, h1, lede, main_html, faqs, related
   <h2 class="h2" style="margin-bottom:16px;">Keep reading</h2>
   <div class="related">{rel}</div>
 </div></section>
-{cta_band(root,"pink","Not sure which way in fits your case?","Tell us your situation and we'll route you to the right level of help — no hard sell.","Get started",CTA["get_started"])}
+{cta_band(root,"pink","Not sure which way in fits your case?","Tell us your situation and we'll route you to the right level of help — no hard sell.","Get started",root + "get-started/")}
 """
     page("topics/"+slug+"/index.html", mtitle, mdesc, body, active="")
 
@@ -1089,7 +1094,7 @@ body = f"""
 {page_hero("One source of truth", "Flat-fee pricing, in one place",
   "Every price the firm publishes lives here — so two pages never quote you two different numbers. Figures are starting points; your consult confirms the exact scope and fee for your case.",
   root, [("Pricing","pricing/")], tint="tint-lawyers",
-  ctas=[f'<a href="{CTA["get_started"]}" class="btn btn-solid">Get started</a>'])}
+  ctas=[f'<a href="{root}get-started/" class="btn btn-solid">Get started</a>'])}
 
 <section class="section paper"><div class="wrap">
   <div class="kicker">Representation</div>
@@ -1160,7 +1165,7 @@ body = f"""
   <p class="mt-m" style="color:var(--muted);font-size:14px;max-width:60ch;">Terms: coaching fees are non-refundable but flexible for upgrades; a conflict check is required before we begin; retainer engagements carry a 30-day cancellation notice.</p>
 </div></section>
 
-{cta_band(root,"pink","Not sure where you land on the options?","Answer a few quick questions and we'll point you to the right one — no hard sell.","Find your fit",CTA["get_started"])}
+{cta_band(root,"pink","Not sure where you land on the options?","Answer a few quick questions and we'll point you to the right one — no hard sell.","Find your fit",root + "get-started/")}
 """
 page("pricing/index.html", "Flat-Fee Pricing | Family Matters Law Group",
      "One canonical pricing page for Family Matters Law Group: representation, limited appearance, DIY, paralegal, mediation, and coaching fees.",
@@ -1277,7 +1282,7 @@ body = f"""
       <li><a href="{root}ways-we-help/mediators/">Mediation</a></li>
       <li><a href="{root}ways-we-help/guardians-ad-litem/">Guardian ad Litem</a></li>
       <li><a href="{root}ways-we-help/lawyers/">Representation</a></li>
-      <li><a href="{CTA['get_started']}">Book a consult</a></li>
+      <li><a href="{root}get-started/">Book a consult</a></li>
     </ul>
   </aside>
 </div></section>
@@ -1311,7 +1316,7 @@ body = f"""
       <li><a href="{root}ways-we-help/lawyers/">Litigation</a></li>
       <li><a href="{root}ways-we-help/mediators/">Mediation (Español)</a></li>
       <li><a href="{root}es/">En español</a></li>
-      <li><a href="{CTA['get_started']}">Book a consult</a></li>
+      <li><a href="{root}get-started/">Book a consult</a></li>
     </ul>
   </aside>
 </div></section>
@@ -1351,7 +1356,7 @@ body = f"""
   <div class="testimonials">{tcards}</div>
   <p class="mt-m" style="color:var(--muted);font-size:14px;">Testimonials are shared with permission and lightly trimmed for length, never for meaning.</p>
 </div></section>
-{cta_band(root,"pink","Want to be the next one?","Start with a consult — we'll tell you honestly whether we're the right fit.","Get started",CTA["get_started"])}
+{cta_band(root,"pink","Want to be the next one?","Start with a consult — we'll tell you honestly whether we're the right fit.","Get started",root + "get-started/")}
 """
 page("reviews/index.html", "Reviews — 4.5★ / 151 Reviews | Family Matters Law Group",
      "Client and referring-attorney reviews of Family Matters Law Group — 4.5 stars across 151 reviews on Google, Facebook, and Birdeye.",
@@ -1387,26 +1392,22 @@ body = f"""
 {path_finder(root)}
 <section class="section paper" id="routes"><div class="wrap">
   <h2 class="h2 center" style="margin-bottom:8px;">Or choose your route</h2>
-  <p class="measure center" style="margin:0 auto 26px;color:var(--muted);">Already know what you need? Go straight to it.</p>
+  <p class="measure center" style="margin:0 auto 26px;color:var(--muted);">Already know what you need? Go straight to the intake.</p>
   <div class="cards">
-    <a class="card" href="{root}forms/get-started/"><span class="sw" style="background:var(--pink)"></span><h3>I want a lawyer to handle it</h3><p>Full or flat-fee representation for divorce, custody, support, and more.</p><p class="go">Start intake →</p></a>
-    <a class="card" href="{root}ways-we-help/mediators/#book"><span class="sw" style="background:var(--teal)"></span><h3>I want to settle, not fight</h3><p>Certified mediation, English or Spanish, with or without lawyers.</p><p class="go">Book mediation →</p></a>
-    <a class="card" href="{root}forms/coaching/"><span class="sw" style="background:var(--orange)"></span><h3>I'll do it myself, with help</h3><p>Attorney coaching and paralegal drafting behind your own case.</p><p class="go">Start coaching →</p></a>
-    <a class="card" href="{root}forms/guardian-ad-litem/"><span class="sw" style="background:var(--chartreuse)"></span><h3>The case needs a voice for the kids</h3><p>Request a Guardian ad Litem for a child in a case.</p><p class="go">Request a GAL →</p></a>
+    <a class="card" href="{CTA['mediators']}"><span class="sw" style="background:var(--teal)"></span><h3>I want to settle, not fight</h3><p>Certified, bilingual mediation — with or without lawyers. Faster and less costly than a courtroom fight, and it holds up in court.</p><p class="go">Start mediation intake →</p></a>
+    <a class="card" href="{CTA['coaches']}"><span class="sw" style="background:var(--orange)"></span><h3>I'll do it myself, with help</h3><p>Attorney coaching and paralegal drafting behind your own case — pay for the specific help you need.</p><p class="go">Start coaching intake →</p></a>
+    <a class="card" href="{CTA['lawyers']}"><span class="sw" style="background:var(--pink)"></span><h3>I want a lawyer to handle it</h3><p>Full or flat-fee representation. We're experienced litigators and selective about the cases we take — a paid consult confirms fit.</p><p class="go">Start intake →</p></a>
+    <a class="card" href="{CTA['gal']}"><span class="sw" style="background:var(--chartreuse)"></span><h3>The case needs a voice for the kids</h3><p>Request a Guardian ad Litem for a child in a case.</p><p class="go">Request a GAL →</p></a>
   </div>
-  <div class="notice mt-l">Still not sure? A <strong>$250 consultation</strong> (credited toward retainers over $2,500) will sort it out. <a href="{root}pricing/">See pricing</a> or <a href="{root}forms/get-started/">start with the Get Started form</a>.</div>
+  <div class="notice mt-l">Still not sure? A <strong>paid attorney consult</strong> is the honest way to sort it out — see the <a href="{root}pricing/">pricing page</a> for consult and flat-fee details.</div>
 </div></section>
 <section class="section dim"><div class="wrap measure">
-  <h2 class="h2 center" style="margin-bottom:8px;">Specific intake forms</h2>
-  <p class="center" style="margin:0 auto 22px;color:var(--muted);">Already know exactly what you need? Go straight to the right form.</p>
+  <h2 class="h2 center" style="margin-bottom:8px;">More ways to start</h2>
+  <p class="center" style="margin:0 auto 22px;color:var(--muted);">Know exactly what you need? Go straight to it.</p>
   <div class="formlinks">
-    <a href="{root}forms/document-prep/">Document prep &amp; review</a>
-    <a href="{root}forms/form-package/">DIY form package</a>
-    <a href="{root}forms/mediation/">Mediation intake</a>
-    <a href="{root}forms/free-consult/">Book a free consultation</a>
-    <a href="{root}forms/files-review/">Submit files for review</a>
-    <a href="{root}forms/domestic-violence/">Domestic violence / injunction</a>
-    <a href="{root}forms/general/">General contact</a>
+    <a href="{CTA['uncontested']}">Uncontested divorce packet</a>
+    <a href="{CTA['paralegal']}">Paralegal document services</a>
+    <a href="{CTA['gal']}">Guardian ad Litem</a>
   </div>
 </div></section>
 """
@@ -1475,7 +1476,7 @@ for slug,term,short,defn,related in GLOSSARY:
 <section class="section paper"><div class="wrap measure prose">
   <p>{defn}</p>
   <div class="related">{rel}</div>
-  <div class="callout mt-l">Have a case that turns on this? <a href="{CTA['get_started']}">Get started</a> or read the related <a href="{gr}blog/">guides</a>.</div>
+  <div class="callout mt-l">Have a case that turns on this? <a href="{gr}get-started/">Get started</a> or read the related <a href="{gr}blog/">guides</a>.</div>
 </div></section>
 """
     page(f"glossary/{slug}/index.html", f"{term} — Florida Family Law Glossary | Family Matters Law Group",
@@ -1486,7 +1487,7 @@ body = f"""
 {page_hero("En español", "Derecho de familia en Florida — en tu idioma",
   "Somos un bufete bilingüe del sur de la Florida. Ofrecemos representación, mediación (incluso completamente en español) y asesoría legal DIY. Se habla español, sin asteriscos.",
   root, [("En español","es/")], tint="tint-mediators",
-  ctas=[f'<a href="{CTA["get_started"]}" class="btn btn-solid" style="background:var(--teal);box-shadow:none;">Empezar</a>',
+  ctas=[f'<a href="{root}get-started/" class="btn btn-solid" style="background:var(--teal);box-shadow:none;">Empezar</a>',
         f'<a href="{SPANISH}" class="btn btn-outline-light">Ir a abogada-familiar.com</a>'])}
 <section class="section paper"><div class="wrap measure prose">
   <div class="kicker">Cómo podemos ayudar</div>
@@ -1499,7 +1500,7 @@ body = f"""
   </ul>
   <div class="callout"><strong>Nota:</strong> esta es una página inicial en español. La versión completa en español del sitio está en desarrollo; por ahora, nuestra presencia completa en español vive en <a href="{SPANISH}">abogada-familiar.com</a>, y la abogada <a href="{root}attorneys/nazarena-hauser/">Nazarena Hauser</a> atiende casos completamente en español.</div>
 </div></section>
-{cta_band(root,"teal","¿Lista para empezar?","Cuéntenos su situación y la dirigimos al servicio correcto.","Empezar",CTA["get_started"])}
+{cta_band(root,"teal","¿Lista para empezar?","Cuéntenos su situación y la dirigimos al servicio correcto.","Empezar",root + "get-started/")}
 """
 page("es/index.html", "En Español — Derecho de Familia en Florida | Family Matters Law Group",
      "Bufete de derecho de familia bilingüe en el sur de la Florida: representación, mediación en español, y asesoría legal DIY.",
@@ -1577,7 +1578,7 @@ for fn, slug, cat in BLOG_META:
     {inner}
   </article>
   <div class="measure" style="margin:40px auto 0;">
-    <div class="cta-band pink"><div><h2>Questions about your own case?</h2><p>Talk it through — no hard sell, just a straight read on your options.</p></div><a href="{CTA['get_started']}" class="btn btn-solid">Get started</a></div>
+    <div class="cta-band pink"><div><h2>Questions about your own case?</h2><p>Talk it through — no hard sell, just a straight read on your options.</p></div><a href="{gr}get-started/" class="btn btn-solid">Get started</a></div>
   </div>
 </div></section>
 """
@@ -1649,7 +1650,7 @@ home_body = f"""
     <div class="hero-sub" id="heroSub">
       <p>Lawyers, mediators, DIY legal coaches, and guardians ad litem — one South Florida firm built around every way a family actually needs to be represented.</p>
       <div class="hero-actions">
-        <a href="{CTA['get_started']}" class="btn btn-solid">Get started</a>
+        <a href="{root}get-started/" class="btn btn-solid">Get started</a>
         <a href="#services" class="btn btn-outline-light">See how we help</a>
       </div>
     </div>
