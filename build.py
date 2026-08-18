@@ -9,7 +9,7 @@ site is portable (works via file://, GitHub Pages, or the root domain).
 
 Run:  python3 build.py
 """
-import os, re, html
+import os, re, html, json
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 BLOG_SRC = os.path.join(ROOT_DIR, "content", "blog-src")
@@ -198,18 +198,43 @@ def footer(root):
 </footer>"""
 
 
+SITE_URL = "https://www.familymatterslawgroup.com"   # production canonical host
+OG_IMAGE = SITE_URL + "/assets/images/hero-duo.jpg"
+LANG_ES_PAGES = {"es/index.html"}
+
+def _canonical(relpath):
+    path = relpath[:-len("index.html")] if relpath.endswith("index.html") else relpath
+    return SITE_URL + "/" + path
+
 def page(relpath, title, desc, body, active="", is_home=False, head_extra="", body_extra="", body_class=""):
     root = root_for(relpath)
     classes = (["home"] if is_home else []) + ([body_class] if body_class else [])
     cls = (' class="%s"' % " ".join(classes)) if classes else ""
+    lang = "es" if relpath in LANG_ES_PAGES else "en"
+    canon = _canonical(relpath)
+    et = html.escape(title, quote=True); ed = html.escape(desc, quote=True)
+    seo = f"""<link rel="canonical" href="{canon}">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="{'website' if is_home else 'article'}">
+<meta property="og:site_name" content="Family Matters Law Group">
+<meta property="og:title" content="{et}">
+<meta property="og:description" content="{ed}">
+<meta property="og:url" content="{canon}">
+<meta property="og:image" content="{OG_IMAGE}">
+<meta property="og:locale" content="{'es_US' if lang=='es' else 'en_US'}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{et}">
+<meta name="twitter:description" content="{ed}">
+<meta name="twitter:image" content="{OG_IMAGE}">
+"""
     doc = f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="{lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
-<meta name="description" content="{html.escape(desc, quote=True)}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="description" content="{ed}">
+{seo}<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/css/site.css">
@@ -336,11 +361,20 @@ def path_finder(root):
     return tpl.replace("__ROUTES__", json.dumps(routes))
 
 
+def _plain(s):
+    return html.unescape(re.sub(r"<[^>]+>", "", s)).strip()
+
+def jsonld(obj):
+    return '<script type="application/ld+json">' + json.dumps(obj, separators=(",", ":")) + '</script>'
+
 def faq(items):
     rows = "".join(
         f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in items
     )
-    return f'<div class="faq">{rows}</div>'
+    ld = {"@context": "https://schema.org", "@type": "FAQPage",
+          "mainEntity": [{"@type": "Question", "name": _plain(q),
+                          "acceptedAnswer": {"@type": "Answer", "text": _plain(a)}} for q, a in items]}
+    return f'<div class="faq">{rows}</div>{jsonld(ld)}'
 
 
 def subpaths(cards):
@@ -1479,6 +1513,11 @@ for slug,term,short,defn,related in GLOSSARY:
   <div class="callout mt-l">Have a case that turns on this? <a href="{gr}get-started/">Get started</a> or read the related <a href="{gr}blog/">guides</a>.</div>
 </div></section>
 """
+    tb += jsonld({"@context": "https://schema.org", "@type": "DefinedTerm",
+                  "name": _plain(term), "description": _plain(defn),
+                  "inDefinedTermSet": {"@type": "DefinedTermSet",
+                                       "name": "Florida Family Law Glossary",
+                                       "url": SITE_URL + "/glossary/"}})
     page(f"glossary/{slug}/index.html", f"{term} — Florida Family Law Glossary | Family Matters Law Group",
          short + ".", tb, active="")
 
@@ -1582,6 +1621,14 @@ for fn, slug, cat in BLOG_META:
   </div>
 </div></section>
 """
+    art += jsonld({
+        "@context": "https://schema.org", "@type": "BlogPosting",
+        "headline": _plain(title), "description": _plain(desc),
+        "author": {"@type": "Person", "name": "Leisa Wintz", "jobTitle": "Founding Attorney"},
+        "publisher": {"@type": "Organization", "name": "Family Matters Law Group, P.A.",
+                      "logo": {"@type": "ImageObject", "url": SITE_URL + "/assets/images/wordmark-black.png"}},
+        "mainEntityOfPage": _canonical(f"blog/{slug}/index.html"),
+        "image": OG_IMAGE, "inLanguage": "en"})
     page(f"blog/{slug}/index.html", f"{title} | Family Matters Law Group", desc, art, active="")
     blog_cards.append((slug, cat, title, desc))
 
@@ -1728,6 +1775,16 @@ home_body = f"""
   <div class="post-grid reveal">{posts_html}</div>
 </div></section>
 """
+home_body += jsonld({
+    "@context": "https://schema.org", "@type": "LegalService",
+    "name": "Family Matters Law Group, P.A.", "url": SITE_URL + "/",
+    "image": OG_IMAGE, "logo": SITE_URL + "/assets/images/wordmark-black.png",
+    "description": "Florida family law firm — settlement-focused divorce, certified mediation, DIY legal coaching, and guardian ad litem services. Bilingual, English and Spanish.",
+    "areaServed": [{"@type": "AdministrativeArea", "name": "Broward County, Florida"},
+                   {"@type": "State", "name": "Florida"}],
+    "knowsLanguage": ["en", "es"], "priceRange": "$$",
+    "sameAs": ["https://g.page/r/Cfy_EtvIJidIEBE/review"],
+    "founder": {"@type": "Person", "name": "Leisa Wintz"}})
 page("index.html", "Family Matters Law Group — Florida Family Law, Mediation, DIY Coaching & Guardians ad Litem",
      "A South Florida family law firm with four ways in: lawyers, mediators, DIY legal coaches, and guardians ad litem. Warm, direct, flat-fee options. Bilingual — se habla español.",
      home_body, active="", is_home=True)
@@ -2381,3 +2438,16 @@ for relpath, doc in PAGES:
         f.write(doc)
     written += 1
 print(f"\nWROTE {written} pages.")
+
+# ---- sitemap.xml + robots.txt ------------------------------------------------
+_sm_skip = {"404.html", "preview-homepage.html"}
+_urls = sorted({_canonical(rp) for rp, _ in PAGES if rp not in _sm_skip and not rp.startswith("forms/")})
+_sm = ['<?xml version="1.0" encoding="UTF-8"?>',
+       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+for u in _urls:
+    _sm.append(f"  <url><loc>{u}</loc><changefreq>monthly</changefreq></url>")
+_sm.append("</urlset>")
+open(os.path.join(ROOT_DIR, "sitemap.xml"), "w", encoding="utf-8").write("\n".join(_sm))
+open(os.path.join(ROOT_DIR, "robots.txt"), "w", encoding="utf-8").write(
+    "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % SITE_URL)
+print(f"WROTE sitemap.xml ({len(_urls)} urls) + robots.txt")
