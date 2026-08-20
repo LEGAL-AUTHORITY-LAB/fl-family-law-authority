@@ -1,0 +1,311 @@
+[
+ {
+  "slug": "about",
+  "title": "About | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/about.html",
+  "action": "update",
+  "id": 1
+ },
+ {
+  "slug": "adoption",
+  "title": "Adoption in Florida \u2014 Step-Parent & Second-Parent | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/adoption.html",
+  "action": "create"
+ },
+ {
+  "slug": "alimony-complete-guide",
+  "title": "The Complete Guide to Alimony in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/alimony-complete-guide.html",
+  "action": "create"
+ },
+ {
+  "slug": "alimony",
+  "title": "Alimony in Florida After the 2023 Reform | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/alimony.html",
+  "action": "create"
+ },
+ {
+  "slug": "best-interest-of-the-child",
+  "title": "Best Interest of the Child \u2014 Florida Family Law Glossary | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/best-interest-of-the-child.html",
+  "action": "create"
+ },
+ {
+  "slug": "blog",
+  "title": "Blog & Guides | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/blog.html",
+  "action": "update",
+  "id": 2
+ },
+ {
+  "slug": "business-owner-income",
+  "title": "Calculating Income for Business Owners in Florida Family Court | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/business-owner-income.html",
+  "action": "create"
+ },
+ {
+  "slug": "child-support-complete-guide",
+  "title": "The Complete Guide to Child Support in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/child-support-complete-guide.html",
+  "action": "create"
+ },
+ {
+  "slug": "child-support",
+  "title": "Child Support in Florida \u2014 How It's Calculated | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/child-support.html",
+  "action": "create"
+ },
+ {
+  "slug": "collaborative-divorce",
+  "title": "Collaborative Divorce | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/collaborative-divorce.html",
+  "action": "create"
+ },
+ {
+  "slug": "coparenting-coaching",
+  "title": "Coparenting Coaching & Education | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/coparenting-coaching.html",
+  "action": "create"
+ },
+ {
+  "slug": "current-clients",
+  "title": "Current Clients | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/current-clients.html",
+  "action": "create"
+ },
+ {
+  "slug": "custody-and-parenting",
+  "title": "Custody & Parenting Plans in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/custody-and-parenting.html",
+  "action": "create"
+ },
+ {
+  "slug": "divorce",
+  "title": "Divorce in Florida \u2014 Every Path Explained | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/divorce.html",
+  "action": "create"
+ },
+ {
+  "slug": "diy-divorce-packages",
+  "title": "DIY Divorce Packages | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/diy-divorce-packages.html",
+  "action": "create"
+ },
+ {
+  "slug": "diy-legal-coaches",
+  "title": "DIY Legal Coaches \u2014 Attorney-Coached Self-Representation | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/diy-legal-coaches.html",
+  "action": "create"
+ },
+ {
+  "slug": "domestic-violence-injunctions",
+  "title": "Domestic Violence & Injunctions in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/domestic-violence-injunctions.html",
+  "action": "create"
+ },
+ {
+  "slug": "equitable-distribution",
+  "title": "Equitable Distribution \u2014 Florida Family Law Glossary | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/equitable-distribution.html",
+  "action": "create"
+ },
+ {
+  "slug": "es",
+  "title": "En Espa\u00f1ol \u2014 Derecho de Familia en Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/es.html",
+  "action": "create"
+ },
+ {
+  "slug": "get-started",
+  "title": "Get Started | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/get-started.html",
+  "action": "create"
+ },
+ {
+  "slug": "glossary",
+  "title": "Legal Glossary | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/glossary.html",
+  "action": "create"
+ },
+ {
+  "slug": "guardian-ad-litem-guide",
+  "title": "Working With a Guardian ad Litem in Florida: Complete Guide | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/guardian-ad-litem-guide.html",
+  "action": "create"
+ },
+ {
+  "slug": "guardians-ad-litem",
+  "title": "Guardians ad Litem \u2014 Court-Appointed Child Advocacy | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/guardians-ad-litem.html",
+  "action": "create"
+ },
+ {
+  "slug": "imputed-income",
+  "title": "Imputed Income in Florida Family Law Cases | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/imputed-income.html",
+  "action": "create"
+ },
+ {
+  "slug": "income-shares-model",
+  "title": "Income-Shares Model \u2014 Florida Family Law Glossary | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/income-shares-model.html",
+  "action": "create"
+ },
+ {
+  "slug": "injunctions-domestic-violence",
+  "title": "Restraining Orders & DV Injunctions in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/injunctions-domestic-violence.html",
+  "action": "create"
+ },
+ {
+  "slug": "jurisdiction-venue",
+  "title": "Jurisdiction and Venue in Florida Family Law | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/jurisdiction-venue.html",
+  "action": "create"
+ },
+ {
+  "slug": "lawyers",
+  "title": "Lawyers \u2014 Full & Flat-Fee Family Law Representation | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/lawyers.html",
+  "action": "create"
+ },
+ {
+  "slug": "learn",
+  "title": "Learn \u2014 Florida Family Law Guides & Glossary | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/learn.html",
+  "action": "create"
+ },
+ {
+  "slug": "legal-representation-options",
+  "title": "Your Legal Representation Options in Florida Family Law | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/legal-representation-options.html",
+  "action": "create"
+ },
+ {
+  "slug": "leisa-wintz",
+  "title": "Leisa Wintz, Founding Attorney | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/leisa-wintz.html",
+  "action": "create"
+ },
+ {
+  "slug": "lgbtq-family-law",
+  "title": "LGBTQ+ Family Law in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/lgbtq-family-law.html",
+  "action": "create"
+ },
+ {
+  "slug": "mediators",
+  "title": "Mediators \u2014 Certified, Bilingual Divorce Mediation | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/mediators.html",
+  "action": "create"
+ },
+ {
+  "slug": "modify-parenting-plan",
+  "title": "How to Modify a Parenting Plan in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/modify-parenting-plan.html",
+  "action": "create"
+ },
+ {
+  "slug": "name-change",
+  "title": "Name Change in Florida \u2014 Adult, Minor & Gender Transition | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/name-change.html",
+  "action": "create"
+ },
+ {
+  "slug": "name-changes",
+  "title": "Name Changes in Florida: For Adults and Children | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/name-changes.html",
+  "action": "create"
+ },
+ {
+  "slug": "nazarena-hauser",
+  "title": "Nazarena Hauser, Head of Litigation | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/nazarena-hauser.html",
+  "action": "create"
+ },
+ {
+  "slug": "paralegal-services",
+  "title": "Paralegal Document Services | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/paralegal-services.html",
+  "action": "create"
+ },
+ {
+  "slug": "parenting-coordination",
+  "title": "Parenting Coordination | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/parenting-coordination.html",
+  "action": "create"
+ },
+ {
+  "slug": "paternity-testing",
+  "title": "Court-Ordered Paternity Testing in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/paternity-testing.html",
+  "action": "create"
+ },
+ {
+  "slug": "paternity",
+  "title": "Paternity in Florida \u2014 Establishing Parentage & Rights | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/paternity.html",
+  "action": "create"
+ },
+ {
+  "slug": "peace-plan",
+  "title": "P.E.A.C.E. \u2014 Florida Family Law Glossary | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/peace-plan.html",
+  "action": "create"
+ },
+ {
+  "slug": "prenup-postnup",
+  "title": "Prenuptial & Postnuptial Agreements in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/prenup-postnup.html",
+  "action": "create"
+ },
+ {
+  "slug": "pricing",
+  "title": "Flat-Fee Pricing | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/pricing.html",
+  "action": "create"
+ },
+ {
+  "slug": "reviews",
+  "title": "Reviews \u2014 4.5\u2605 / 151 Reviews | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/reviews.html",
+  "action": "create"
+ },
+ {
+  "slug": "shop",
+  "title": "DIY Legal Shop \u2014 Attorney-Built Templates & Toolkits (Coming Soon) | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/shop.html",
+  "action": "update",
+  "id": 14
+ },
+ {
+  "slug": "summer-camp-parenting",
+  "title": "Summer Camp and Shared Parental Responsibility in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/summer-camp-parenting.html",
+  "action": "create"
+ },
+ {
+  "slug": "team",
+  "title": "Our Team | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/team.html",
+  "action": "create"
+ },
+ {
+  "slug": "timesharing",
+  "title": "Timesharing \u2014 Florida Family Law Glossary | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/timesharing.html",
+  "action": "create"
+ },
+ {
+  "slug": "uccjea",
+  "title": "UCCJEA \u2014 Florida Family Law Glossary | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/uccjea.html",
+  "action": "create"
+ },
+ {
+  "slug": "unmarried-fathers-rights",
+  "title": "Unmarried Fathers' Rights in Florida | Family Matters Law Group",
+  "file": "/tmp/claude-0/-home-user-fl-family-law-authority/7ac3e289-c815-5f2d-9278-ecc0918a4dd6/scratchpad/final/unmarried-fathers-rights.html",
+  "action": "create"
+ }
+]
