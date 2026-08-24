@@ -1,98 +1,90 @@
-# Client Portal — Build Log & Handoff
+# FMLG Portals — Build & Data-Load Log
 **Companion to:** `client-portal-discovery-guide.md`
-**Built by:** LAL Ops (Claude) for Leisa Wintz — **Date:** August 9, 2026
+**Maintained by:** LAL Ops (Claude) for Leisa Wintz
 
 > **Internal — confidential.** Excluded from the public GitHub Pages deploy
-> (lives under `docs/`). Contains demo logins and infrastructure notes.
+> (`docs/` is git-ignored from the site build). Contains app URLs, real client
+> counts, and data-quality flags. Do not move into the web-served tree.
 
 ---
 
-## What was built
+## The two live apps (FMLG Lovable workspace)
 
-A working Lovable app — **"Client Compass"** (FMLG / Legal Authority Lab client
-portal) — implementing **both** builds from the master guide in **one project**,
-per Section 1's "two builds, one project" recommendation.
+| App | Purpose | URL | Visibility |
+|---|---|---|---|
+| **FMLG Command Center** (`case-command-center-42`) | Internal staff case-management — matters, deadlines, discovery tracking, SharePoint/Slack | editor: lovable.dev/projects/2e66e743-d5f9-4266-b656-3a90e5ac3762 | private, not published |
+| **FMLG Client Connect** (`fmlg-case-compass`) | Client-facing litigation portal — retainer→close lifecycle, discovery uploads, docs, invoices, deadlines | https://fmlg-case-compass.lovable.app | project set private; **deployment still published (public URL)** — see Open Items |
 
-- **Workspace:** Family Matters Law Group (Lovable, Pro)
-- **Editor:** https://lovable.dev/projects/5e95deef-7767-468e-882f-a0296cda8531
-- **Live app:** https://fmlg-client-portal.lovable.app
-- **Preview:** https://id-preview--5e95deef-7767-468e-882f-a0296cda8531.lovable.app
-- **Stack:** TanStack Start (TS) + Tailwind + shadcn/ui, **Lovable Cloud
-  (Supabase/Postgres)** backend with **Row-Level Security**.
-
-### Demo logins (passwordless — enter email, then use the on-screen code)
-| Role | Email |
-|---|---|
-| Staff / admin | `leisa@fmlg.example` (also `henry@fmlg.example`) |
-| Coaching client | `owner@riveracole.example`, `owner@delgadolaw.example`, `owner@northbendfamily.example` |
-| Litigation client | `owner@harper.example` (matter: *Harper v. Harper*, Full 12.285) |
-
-The app is in **DEMO MODE**: the 6-digit code is shown on screen. Adding a
-`RESEND_API_KEY` secret flips it to real emailed codes (see Open Items).
+*(A third app, "Florida Family Navigator" / `florida-diy-legal`, is the public DIY self-help site — untouched by this work.)*
 
 ---
 
-## Feature coverage vs. the guide
+## Data load — August 23 reconciliation set (loaded 2026-08-24)
 
-**Shared architecture (§4)** — ✅
-- Passwordless email + 6-digit code auth; staff-managed allowlist (§4.3).
-- Metadata-only data layer: documents are labeled external SharePoint/OneDrive
-  links, never uploaded binaries (§4.1). Per-matter/per-client link mapping (§4.2).
-- Row-Level Security: each client sees only their own record; staff see all.
+Source: three files Leisa produced from the SharePoint cleanup — Master Calendar
+(95 events / 37 open matters), Master Discovery Tracker (19 requests / 18
+matters, full Rule 12.285 checklists), and the SharePoint Reconciliation
+Checklist (134 matter rows w/ folder URLs). Client emails/phones/opposing-party/
+county were harvested from each matter's SharePoint intake form via the
+Microsoft 365 connector.
 
-**Build B — Coaching Portal (§3)** — ✅
-- Staff: manage clients, suites + install status, session-log form that
-  draws down the retainer at the guide's rates ($600/2hr, $350/1hr, $150/30min;
-  build $350/hr Leisa, $450/hr Henry), plus top-up entries.
-- Client: install tracker (per-suite + overall bars), running retainer **ledger**
-  (§3.2), session history, suite-filtered resource library, Zoom "Book a session"
-  card, "Join our Slack" card (Option 1 link-out per §3.4).
+### Command Center (internal) — all verified by SQL
+- **83 matters** (was 78; added 5 active matters that were missing: Flora,
+  Gutierrez, Morrill, Paul, Thompson-James).
+- **51 real case refs** populated (`case_number` was empty before).
+- **91 calendar events** (deadlines / hearings / mediations) — was 0.
+- **251 discovery items** across 17 matters, with per-item 12.285 status
+  (Provided / Outstanding / Rejected / N/A / Pending Review), dates, file counts,
+  and the mis-filing notes from the tracker — was 3.
+- **46 client emails, 42 opposing parties, 32 counties, + phones** backfilled.
 
-**Build A — Litigation Portal (§2)** — ✅
-- Matter setup: scope gate Full 12.285 vs Limited (§2.2), four external link
-  mappings (Filed Pleadings → *Filed Documents* subfolder, OP Filed, Notices &
-  Orders, Client Discovery Intake) (§2.1).
-- Discovery module: category checklist across the 12.285 categories with
-  plain-language explainers, status (Not Started/Uploaded/Reviewed/Flagged
-  Missing), per-category + overall progress bars, and the **"Start Here"**
-  FA-priority subset up top (§2.2 sequencing rule).
-- Upload flow respects the metadata-only rule: routes the client to the firm's
-  OneDrive intake folder and tracks status only (§2.7).
-- The four read-only link categories with the filing-status rule surfaced
-  ("filed = actually in the Filed Documents folder") (§2.1).
-- FA intake questionnaire — raw numbers only, no client-side math; every field
-  flagged **client-reported vs document-confirmed** for the firm's QC (§2.3).
-- Deadlines & events with a per-event **client-visible** toggle (§2.4).
-- Document review/approval — Approve / Request Changes / Comment, explicitly
-  **not** e-signature (§2.5).
-- Per-matter staff-to-client message thread, timestamped + exportable (§2.6).
-
-**Ethics / UPL pass (§4.4)** — ✅ (first-pass guardrails, not a substitute for
-the formal review — see Open Items)
-- Persistent "not legal advice" disclaimer in every client view.
-- One-time "How this portal works" acknowledgement modal per user.
-- Discovery/FA copy kept descriptive/procedural, not advice-giving.
+### Client Connect (client-facing) — private data, RLS-protected
+- **49 active litigation matters** loaded (52 total incl. 3 demo), each with real
+  client email (the login key), matter type, `stage = active`, and case number.
+- **46 real emails** from intake forms; **3 placeholders** for matters with no
+  email on file — replace before inviting these clients:
+  - Calbo, Robert (2024-5003) — no SharePoint folder found
+  - Lyles, Erica (2026-1341) — intake file unreadable (Graph 400); cell on file
+  - Montero, Michael (2025-0724) — Smokeball record had no email
+- **Excluded as firm/internal** (not real client matters): Mendez, Diveana
+  (2024-0310); Serrano, Angelica (2025-0898, empty folder).
+- Auth = invite-only passwordless magic link; RLS confirmed: a client can read
+  only their own matter (`client_email = login`), staff see all.
 
 ---
 
-## Open items before real-client use (from guide §6 & §7)
+## Data-quality flags surfaced (for firm follow-up)
 
-1. **Ethics review gate (§6.5, §4.4).** Route through `fmlg-ethics-workflow`
-   before Build A goes live with any real client outside the pilot. The in-app
-   disclaimers are a starting point, not the sign-off.
-2. **Email delivery.** Add `RESEND_API_KEY` in Lovable to switch codes from
-   on-screen demo to real email.
-3. **Microsoft 365 / SharePoint connector.** Links are staff-pasted today; wire
-   the M365 connector to auto-populate the four link categories and (later) real
-   uploads (§7 "who owns the OneDrive connector auth").
-4. **Single-firm vs multi-tenant (§7).** Built single-firm first. Multi-tenant
-   (LAL resell / Command Center module) needs firm-level isolation added to the
-   data model — decide with Henry before that step.
-5. **Pilot (§3.5, §6).** Test Build B on 2–3 live coaching clients and Build A on
-   one real FMLG matter before wider rollout.
+- **Duplicate matter rows in Command Center:** "Bernardin, Anne-Marie" **and**
+  "Bernardin, Annemarie"; "DeMeyere, Natasha" ×2; **"Gamarra, Sergio" ×3** (no
+  refs). Because Gamarra has 3 identical rows, its calendar events + MD checklist
+  were **not** auto-attached — dedupe and tell us which is 2026-1281 (OOP) vs
+  2026-1360.
+- **Case-number mismatches:** Bernardin folder ref is 2026-1278 (not 1282);
+  Lemes renamed from 2026-1287 → 2026-3000. Confirm the canonical refs.
+- **Mis-filed discovery** (preserved in item notes): Chovert loan-applications
+  uploaded as credit-card statements; Abbott "premarital agreement" is actually
+  custody filings; Calbo brokerage marked N/A but has 9 files; Bathelemy pay
+  stubs filed as a W-2.
+- **Smokeball data anomaly:** Mora (2025-1026) opposing party slot duplicates the
+  client's own contact.
+- **~76 reconciliation rows not loaded** — almost all GAL matters + mediation-only
+  entries not in the Command Center's scope. Say if you want GAL matters added.
 
-## Build turns (for reference)
-1. Shell + brand + passwordless auth + full Build B coaching portal (seeded).
-2. Migrated localStorage → Lovable Cloud (Postgres + RLS + real auth).
-3. Build A: litigation matters, discovery module, four link categories.
-4. Build A: FA intake, deadlines, document approval, chat + UPL/ethics pass.
+---
+
+## Open items
+
+1. **Decide on the Client Connect public deployment.** The project is private but
+   the deployed site (`fmlg-case-compass.lovable.app`) is still published/public.
+   It only exposes a marketing landing + invite-only login (data is RLS-locked),
+   but if you'd rather it not be reachable at all until go-live, unpublish it from
+   the Lovable editor (there's no API to unpublish).
+2. **Fill the 3 placeholder emails** (Calbo, Lyles, Montero) before inviting them.
+3. **Discovery into Client Connect** — the client-facing 12.285 checklists aren't
+   loaded into Client Connect yet (they're fully in Command Center). Next step if
+   you want clients to see their own discovery status.
+4. **SharePoint 4-category document links** per matter (Filed / OP / Notices /
+   Client Discovery) — not yet mapped into either app; needs the subfolder URLs.
+5. **Dedupe** the Bernardin / DeMeyere / Gamarra rows, then attach Gamarra's held
+   events/discovery.
